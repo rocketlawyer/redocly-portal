@@ -1,7 +1,7 @@
 meta:
-  title: Redocly Training
+  title: Rocket Laywer Developer Center
   description: The best API documentation generator ever.
-  siteUrl: https://developer-portal-starter.redoc.ly
+  siteUrl: https://portal-demo.redoc.ly
   keywords: redocly developer portal, api portal starter, api reference docs
   lang: en-US
 linkChecker:
@@ -25,7 +25,7 @@ login:
     - separatorLine: true
     - label: Sign out
       logout: true
-      link: 'https://demo-idp.ip.cicdv2.dev.rktlyr.com/auth/realms/rldevcenter/logout?client_id=136bd39e-68f3-49b2-b02c-6aa8694e1a28&returnTo=https%3A%2F%2Fdemo-dev-portal.redoc.ly'
+      link: 'https://rocketlawyer-dev-us.auth0.com/v2/logout?returnTo=https%3A%2F%2Frocketlawyer-developer-portal-internal.redoc.ly%2F&client_id=Tqbp3ezKSmymKxgZBWMvMdT60QjLZcdl'
 toc:
   enable: true
 oasDefinitions:
@@ -41,6 +41,12 @@ stylesheets:
 #scripts:
 #  - ./static/intercom.js
 nav:
+  - label: Home
+    page: developer-portal/index.md
+  - label: Quick Starts
+    page: developer-portal/index.md
+  - label: API Documentation
+    page: developer-portal/index.md
 
 footer:
   copyrightText: Copyright © Redocly 2019-2021. All right reserved.
