@@ -10,7 +10,22 @@ linkChecker:
     CheckExternal: false
 logo:
   image: ./images/logo.png
-  altText: Redocly Training
+  altText: Rocket Lawyer
+login:
+  label: Sign in
+  userAvatar:
+    claim: picture
+    fallbackLettersClaim: fullName
+  userLabel:
+    claim: email
+    fallback: '<unknown user>'
+menu:
+  - label: Apps
+    page: apps.mdx
+  - separatorLine: true
+  - label: Sign out
+    logout: true
+    link: 'https://demo-idp.ip.cicdv2.dev.rktlyr.com/auth/realms/rldevcenter/logout?client_id=136bd39e-68f3-49b2-b02c-6aa8694e1a28&returnTo=https%3A%2F%2Fdemo-dev-portal.redoc.ly'
 toc:
   enable: true
 oasDefinitions:
@@ -26,15 +41,6 @@ stylesheets:
 #scripts:
 #  - ./static/intercom.js
 nav:
-
-  - label: Training exercises
-    page: developer-portal/index.md
-
-  - label: External docs
-    icon: ./images/redocly-icon-white.png
-    href: https://redoc.ly/docs/developer-portal/introduction/
-
-  - search: true
 
 footer:
   copyrightText: Copyright © Redocly 2019-2021. All right reserved.
