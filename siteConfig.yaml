@@ -19,13 +19,13 @@ login:
   userLabel:
     claim: email
     fallback: '<unknown user>'
-menu:
-  - label: Apps
-    page: apps.mdx
-  - separatorLine: true
-  - label: Sign out
-    logout: true
-    link: 'https://demo-idp.ip.cicdv2.dev.rktlyr.com/auth/realms/rldevcenter/logout?client_id=136bd39e-68f3-49b2-b02c-6aa8694e1a28&returnTo=https%3A%2F%2Fdemo-dev-portal.redoc.ly'
+  menu:
+    - label: Apps
+      page: apps.mdx
+    - separatorLine: true
+    - label: Sign out
+      logout: true
+      link: 'https://demo-idp.ip.cicdv2.dev.rktlyr.com/auth/realms/rldevcenter/logout?client_id=136bd39e-68f3-49b2-b02c-6aa8694e1a28&returnTo=https%3A%2F%2Fdemo-dev-portal.redoc.ly'
 toc:
   enable: true
 oasDefinitions:
