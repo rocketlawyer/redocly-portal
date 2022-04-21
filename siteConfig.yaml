@@ -30,7 +30,7 @@ toc:
   enable: true
 oasDefinitions:
   signAPI: https://api.redoc.ly/registry/assets/rocket-lawyer/Binders/v1
-  authenticationAPI: https://api.redoc.ly/registry/assets/rocket-lawyer/AuthenticationAPI/v1
+  authenticationAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/AuthenticationAPI/v1/openapi.yaml
   documentAPI: https://api.redoc.ly/registry/assets/rocket-lawyer/DocumentAPI/v1
   # add links to definitions in our API registry by using a fully qualified URL.
 stylesheets:
