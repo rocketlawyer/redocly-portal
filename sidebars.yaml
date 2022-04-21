@@ -42,11 +42,12 @@ training:
     expanded: false
     pages:
       - page: references/authentication.page.yaml
+      - page: references/documentation.page.yaml
+      - page: references/sign.page.yaml
 
   - group: Admin
     expanded: true
     pages:
-      - group: Routine
         expanded: true
         pages:
           - group: Rock
