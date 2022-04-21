@@ -41,8 +41,15 @@ training:
   - group: Authentication API
     expanded: false
     pages:
-      - page: reference.page.yaml
-
+      - page: references/authentication.page.yaml
+  - group: Binder &Sign API
+      expanded: false
+      pages:
+        - page: references/sign.page.yaml
+  - group: Document API
+      expanded: false
+      pages:
+        - page: references/documentation.page.yaml
   - group: Admin
     expanded: true
     pages:
