@@ -43,9 +43,8 @@ You can create a link to it.
 
 To do that, you can edit this `markdown.md` file and remove the back ticks around this example.
 
-```markdown
-[My first plain markdown page!](plain.md)
-```
+
+[My first plain markdown page!](plain)
 
 (And save your file.)
 
