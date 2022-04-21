@@ -48,6 +48,7 @@ training:
   - group: Admin
     expanded: true
     pages:
+      - group: Routine
         expanded: true
         pages:
           - group: Rock
