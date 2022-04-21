@@ -38,18 +38,12 @@ training:
         page: developer-portal/mdx.mdx
       - label: Creating React components
         page: developer-portal/custom-component.mdx
-  - group: Authentication API
+  - group: API Documentation
     expanded: false
     pages:
       - page: references/authentication.page.yaml
-  - group: Binder &Sign API
-      expanded: false
-      pages:
-        - page: references/sign.page.yaml
-  - group: Document API
-      expanded: false
-      pages:
-        - page: references/documentation.page.yaml
+      - page: references/sign.page.yaml
+      - page: references/documentation.page.yaml
   - group: Admin
     expanded: true
     pages:
