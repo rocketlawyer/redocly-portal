@@ -44,26 +44,16 @@ stylesheets:
 #  - ./static/intercom.js
 nav:
   - label: Home
-    page: developer-portal/index.md
+    page: index.mdx
   - label: Quick Starts
-    page: developer-portal/index.md
+    page: ./developer-portal/quick-starts.mdx
   - label: API Documentation
-    page: developer-portal/index.md
+    page: ./developer-portal/api-documentation.mdx
 
 footer:
-  copyrightText: Copyright © Redocly 2019-2021. All right reserved.
   columns:
     - group: Legal
       items:
         - label: Terms of Use
           href: 'https://redoc.ly/subscription-agreement/'
-        - label: Privacy Notice
-          href: 'https://redoc.ly/privacy-notice/'
-        - label: Cookie Notice
-          href: 'https://redoc.ly/cookie-notice/'
-    - group: Support
-      items:
-        - label: FAQ
-          page: faq.md
-        - label: Contact us
-          page: contact.mdx
+
