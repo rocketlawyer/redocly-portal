@@ -55,5 +55,5 @@ footer:
     - group: Legal
       items:
         - label: Terms of Use
-          href: 'https://redoc.ly/subscription-agreement/'
+          page: ./developer-portal/terms-and-conditions.md
 

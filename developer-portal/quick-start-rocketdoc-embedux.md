@@ -185,5 +185,5 @@ Now that you can create a document interview, display and interact with it, chec
 
 **API documentation**
 
-*   [RocketDocument API documentation](/./references/documentation.page.yaml)
-*   [Authentication API documentation](/../references/authentication.page.yaml)
+*   [RocketDocument API documentation](../references/documentation.page.yaml)
+*   [Authentication API documentation](../references/authentication.page.yaml)
