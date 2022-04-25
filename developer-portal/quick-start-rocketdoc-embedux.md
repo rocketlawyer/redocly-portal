@@ -9,7 +9,7 @@ What you’ll need
 ----------------
 
 1.  **Client credentials**
-    *   These can be obtained through the onboarding process in the [Welcome Guide](welcome-guide)
+    *   These can be obtained through the onboarding process in the [Welcome Guide](welcome-guide.md)
 2.  **templateId**
     *   This is the unique ID of the template used to initialize the interview. For example, for a lease agreement, you can use this: `04d9d0ba-3113-40d3-9a4e-e7b226a72154`
 3.  **partnerEndUserId**
@@ -26,7 +26,7 @@ Getting started
 
 **Note:** Urls in this Quick Start use `api-sandbox.rocketlawyer.com`. For production, please use `api.rocketlawyer.com`.
 
-Each call to the **RocketDocument API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the \[Authentication API\](/docs/partner-auth-service-product-sandbox/1/routes/accesstoken/post): \`\`\`
+Each call to the **RocketDocument API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the [Authentication API](../references/authentication.page.yaml):
 
     POST https://api-sandbox.rocketlawyer.com/partners/v1/auth/accesstoken
 
@@ -54,11 +54,11 @@ Assumptions for creating an interview:
 
 
 **Request**
-To create an interview, make a POST request to the interviews endpoint in the [RocketDocument API](/docs/rocketdoc-api-product-sandbox/1/routes/interviews/post): \`\`\`
+To create an interview, make a POST request to the interviews endpoint in the [RocketDocument API](../references/documentation.page.yaml):
 
-    POST https://api-sandbox.rocketlawyer.com/rocketdoc/v1/interviews \`\`\`
+    POST https://api-sandbox.rocketlawyer.com/rocketdoc/v1/interviews
 
-Authorization header where \`\`\`{accessToken}\`\`\` is obtained in step 1: \`\`\`
+Authorization header where `{accessToken}` is obtained in step 1:
 
     "Authorization: Bearer {accessToken}"
 
@@ -99,7 +99,7 @@ The web component tag somewhere in the body of your html:
 
     <rocket-document serviceToken={rl-rdoc-servicetoken} interviewId={interview-id}></rocket-document>
 
- `{rl-rdoc-servicetoken}` is the service token from the previous step. You can find more on access and service tokens at [**Authentication API Documentation**](/docs/partner-auth-service-product-sandbox/1/overview)
+ `{rl-rdoc-servicetoken}` is the service token from the previous step. You can find more on access and service tokens at [**Authentication API Documentation**](../references/authentication.page.yaml)
 
 `{interview-id}` is from the body of the response in the previous step. (not the same as template id)
 
@@ -139,7 +139,7 @@ If you're integrating with **RocketSign**, you'll need to retrieve the Interview
 
 **Request**
 
-    GET https://api-sandbox.rocketlawyer.com/rocketdoc/v1/interviews/{interviewId} \`\`\`
+    GET https://api-sandbox.rocketlawyer.com/rocketdoc/v1/interviews/{interviewId}
 
 **Example Response**
 
@@ -181,9 +181,9 @@ Now that you can create a document interview, display and interact with it, chec
 
 **Quick Starts**
 
-*   [Quick Start: RocketSign Embedded UX](rocketsign-embedded-ux)
+*   [Quick Start: RocketSign Embedded UX](quick-start-rocketsign-embedux.md)
 
 **API documentation**
 
-*   [RocketDocument API documentation](/docs/rocketdoc-api-product-sandbox/1/overview)
-*   [Authentication API documentation](/docs/partner-auth-service-product-sandbox/1/overview)
+*   [RocketDocument API documentation](/./references/documentation.page.yaml)
+*   [Authentication API documentation](/../references/authentication.page.yaml)

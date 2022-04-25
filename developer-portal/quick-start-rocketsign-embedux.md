@@ -9,9 +9,9 @@ What you’ll need
 ----------------
 
 1.  **Client credentials**
-    *   These can be obtained through the onboarding process in the [Welcome Guide](welcome-guide)
+    *   These can be obtained through the onboarding process in the [Welcome Guide](welcome-guide.md)
 2.  **binderId**
-    *   This is unique ID of the binder to display. You can get this by following [Quick Start: RocketDocument Embedded UX](rocketdocument-embedded-ux)
+    *   This is unique ID of the binder to display. You can get this by following [Quick Start: RocketDocument Embedded UX](quick-start-rocketdoc-embedux.md)
 
 
 
@@ -22,7 +22,7 @@ Getting started
 
 **Note:** Urls in this Quick Start use `api-sandbox.rocketlawyer.com`. For production, please use `api.rocketlawyer.com`.
 
-Each call to the **RocketSign & Binders API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the \[Authentication API\](/docs/partner-auth-service-product-sandbox/1/routes/accesstoken/post):
+Each call to the **RocketSign & Binders API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the [Authentication API](../references/authentication.page.yaml):
 
     POST https://api-sandbox.rocketlawyer.com/partners/v1/auth/accesstoken
 
@@ -35,13 +35,13 @@ with correct credentials (`client_id` and `client_secret`) and `grant_type`:
     }
 The response will contain an Access Token (amongst other data):
 
-    "access\_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.(content redacted).tBX73KTTjopBSRDL0cIBt3EK\_DcA3Jc9KKonbpBn6HE"
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.(content redacted).tBX73KTTjopBSRDL0cIBt3EK_DcA3Jc9KKonbpBn6HE"
 
 **Note:** Token content has been redacted in the example to ensure security.
 
 ### Step 2: Generate service token
 
-**Note:** It is highly recommended for you to use service token provided in [RocketDocument Quick Start](/rocketdocument-embedded-ux).
+**Note:** It is highly recommended for you to use service token provided in [RocketDocument Quick Start](quick-start-rocketdoc-embedux.md).
 
 After generating an Access Token in the previous step, you can now generate a Service Token, by once again calling the Authentication API:
 
@@ -108,9 +108,9 @@ Go to your web browser, and open the url:
     https://document-manager.sandbox.rocketlawyer.com/{binderId}#serviceToken={serviceToken}
 
 *   `binderId` is the ID of your binder
-*   `serviceToken` is the service token you created in the previous steps. You can find more on access and service tokens on: [**Authentication API Documentation**](docs/partner-auth-service-product-sandbox/1/overview)
+*   `serviceToken` is the service token you created in the previous steps. You can find more on access and service tokens on: [**Authentication API Documentation**](../references/authentication.page.yaml)
 
-You can get the `binderId` from the document you have created yourself using the [**RocketDocument Embedded UX**](rocketdocument-embedded-ux)
+You can get the `binderId` from the document you have created yourself using the [**RocketDocument Embedded UX**](quick-start-rocketdoc-embedux.md)
 
 
 ### Step 4: Display your document
@@ -174,9 +174,9 @@ Now that you can display and interact with your documents using **RocketSign Emb
 
 **Quick Starts**
 
-*   [Quick Start: RocketDocument Embedded UX](rocketdocument-embedded-ux)
+*   [Quick Start: RocketDocument Embedded UX](quick-start-rocketdoc-embedux.md)
 
 **API documentation**
 
-*   [RocketSign & Binders API documentation](docs/binders-product-document-manager-sandbox/1/overview)
-*   [Authentication API documentation](docs/partner-auth-service-product-sandbox/1/overview)
+*   [RocketSign & Binders API documentation](../references/sign.page.yaml)
+*   [Authentication API documentation](../references/authentication.page.yaml)
