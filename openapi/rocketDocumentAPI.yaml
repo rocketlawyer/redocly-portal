@@ -1,0 +1,416 @@
+openapi: 3.0.0
+info:
+  title: RocketDocument API
+  description: |
+    This API documentation describes the server-side contract by which Rocket Lawyer interviews can be created and completed using the **RocketDocument™ API**.
+    <br/><br/>
+    For a step-by-step walkthrough of how to embed the document creation interview in your UI, check out [Quick Start: RocketDocument Embedded UX](https://rocketlawyer-developer-portal-internal.redoc.ly/developer-portal/quick-start-rocketdoc-embedux/).
+  version: 1.0.0
+servers:
+  - url: https://api-sandbox.rocketlawyer.com/rocketdoc/v1
+    description: sandbox
+  - url: https://api.rocketlawyer.com/rocketdoc/v1
+    description: production
+paths:
+  /interviews:
+    post:
+      responses:
+        '201':
+          description: |
+            Returns a new Interview ID. When the partyEmailAddress is provided a Service Token header scoped to the Interview resource is returned in the response header.
+          headers:
+            rl-rdoc-servicetoken:
+              schema:
+                type: string
+              description: The service token (present only for partyEmailAddress request).
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/InterviewCreateResponse"
+        '400':
+          description: Bad Request
+
+      tags:
+        - Interviews
+      description: |
+        Returns a new Interview ID.  Either a Binder ID or an owner email can be part of the request body.
+        <br/>If a <b>binderId</b> is used, this new interview is created within the context of this binder.
+        <br/>If a <b>partyEmailAddress</b> is used, a new binder is created and a new service token is returned in the response header.  This token is scoped to the interview resource.
+        <br/><br/>Authorization\: Requires general access token.
+      operationId: createInterview
+      requestBody:
+        # description: InterviewCreateRequest
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/InterviewCreateRequest"
+            examples:
+              with binderId:
+                value:
+                  binderId: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+                  partnerEndUserId: cfd1ee5a-061a-40cc-be72-8cbb9945b5d9
+                  templateId: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+              with partyEmailAddress:
+                value:
+                  partyEmailAddress: user@xyzcompany.com
+                  partnerEndUserId: cfd1ee5a-061a-40cc-be72-8cbb9945b5d9
+                  templateId: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+        required: true
+      deprecated: false
+    get:
+      responses:
+        '200':
+          description: |
+            Returns the Interview status of all interviews belonging to the Partner, optionally filterable by partnerEndUserId.
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/InterviewMetaDataResponse"
+        '400':
+          description: Bad Request
+      tags:
+        - Interviews
+      description: |
+        This endpoint returns the statuses of Interviews.
+        <br/><br/>Authorization\: Using a general access token - all Interviews belonging to the Partner are returned, with optional filter 'partnerEndUserId'.
+      operationId: retrieveInterviewStatus
+      parameters:
+        - name: partnerEndUserId
+          in: query
+          description: |
+            The id of the Partner End-user.
+          schema:
+            type: string
+          required: false
+      deprecated: false
+  /interviews/{interviewId}:
+    get:
+      responses:
+        '200':
+          description: |
+            Returns an existing Interview, Template and Binder.
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/InterviewResponse"
+        '400':
+          description: Bad Request
+      tags:
+        - Interviews
+      description: |
+        Returns an existing Interview, Template and Binder.
+        <br/><br/>
+        Authorization\: Requires a general access or scoped access token.
+      operationId: retrieveInterview
+      parameters:
+        - name: interviewId
+          in: path
+          description: The identifier of the interview to retrieve.
+          required: true
+          schema:
+            type: string
+      deprecated: false
+    delete:
+      responses:
+        '204':
+          description: Deletes an Interview resource.
+        '400':
+          description: Bad Request
+      tags:
+        - Interviews
+      description: |
+        Deletes an Interview resource.
+        <br/><br/>
+        Authorization\: Requires a general access or scoped access token.
+      operationId: deleteInterview
+      parameters:
+        - name: interviewId
+          in: path
+          description: The identifier of the interview to delete.
+          required: true
+          schema:
+            type: string
+      deprecated: false
+  /interviews/{interviewId}/answers:
+    patch:
+      tags:
+        - Interviews
+      description: |
+        Patches the interview with provided answers.
+        <br/><br/>
+        Authorization\: Requires a general access or scoped access token.
+      operationId: patchInterviewAnswers
+      parameters:
+        - name: interviewId
+          in: path
+          description: The identifier of the interview to be patched.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/InterviewAnswersResponse"
+      requestBody:
+        # description: AnswersPayloadRequest
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/AnswersPayloadRequest"
+        required: true
+      deprecated: false
+    put:
+      tags:
+        - Interviews
+      description: |
+        Replaces the existing interview answers with those provided.
+        <br/><br/>
+        Authorization\: Requires a general access or scoped access token.
+      operationId: putInterviewAnswers
+      parameters:
+        - name: interviewId
+          in: path
+          description: The identifier of the interview to put.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/InterviewAnswersResponse"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/AnswersPayloadRequest"
+        required: true
+      deprecated: false
+  /interviews/{interviewId}/completions:
+    post:
+      tags:
+        - Interviews
+      description: |
+        Completes the interview, for which answers have been supplied.
+        <br/><br/>
+        Authorization\: Requires a general access or scoped access token.
+      operationId: completeInterview
+      parameters:
+        - name: interviewId
+          in: path
+          description: The identifier of the interview to be completed.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/InterviewCompleteResponse"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/AnswersPayloadRequest"
+        required: true
+      deprecated: false
+components:
+  schemas:
+    AnswersPayloadRequest:
+      required:
+        - answersPayload
+      type: object
+      properties:
+        answersPayload:
+          type: object
+          description: The answers payload.
+          properties:
+            version:
+              type: integer
+              example: 2
+            Fk8jctrn744ku5:
+              type: boolean
+              example: true
+            Fk8jd1no93zprz:
+              type: string
+              example: My Business
+            Fk8jd4pfntjpvf:
+              type: boolean
+              example: false
+            Fk8jdel8mfwiot:
+              type: string
+              example: "415 9999999"
+    Binder:
+      type: object
+      properties:
+        binderId:
+          type: string
+          description: The Binder Id resource.
+          example: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+        documentId:
+          type: string
+          description: The Document Id resource.
+          example: 7d989647-ecf2-4673-9486-80c3b890ed3c
+    Interview:
+      type: object
+      properties:
+        answersPayload:
+          type: object
+          description: The answers payload.
+          example:
+            version: 2
+            Fk8jctrn744ku5: true
+            Fk8jd1no93zprz: "My Business"
+            Fk8jd4pfntjpvf: false
+            Fk8jdel8mfwiot: "415 9999999"
+        createdAt:
+          type: string
+          description: 'The date the resource was created.'
+          example: '2020-12-01T17:51:40.795Z'
+        updatedAt:
+          type: string
+          description: 'The date the resource was updated.'
+          example: '2021-12-01T18:51:40.795Z'
+        interviewName:
+          type: string
+          description: The interview name.
+          example: Employment contract
+        interviewId:
+          type: string
+          description: Identifies this interview.
+          example: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+        interviewStatus:
+          type: string
+          description: 'The status of the interview.'
+          example: 'created'
+        templateVersionId:
+          type: string
+          description: Identifies the template associated with this interview.
+          example: 7d989647-ecf2-4673-9486-80c3b890ed3c
+    InterviewAnswersResponse:
+      type: object
+      properties:
+        answersPayload:
+          type: object
+          description: The answers payload.
+          properties:
+            version:
+              type: integer
+              example: 2
+            Fk8jctrn744ku5:
+              type: boolean
+              example: true
+            Fk8jd1no93zprz:
+              type: string
+              example: My Business
+            Fk8jd4pfntjpvf:
+              type: boolean
+              example: false
+            Fk8jdel8mfwiot:
+              type: string
+              example: "415 9999999"
+    InterviewCompleteResponse:
+      type: object
+      properties:
+        binder:
+          $ref: '#/components/schemas/Binder'
+    InterviewCreateRequest:
+      type: object
+      properties:
+        binderId:
+          type: string
+          description: The identifier of the binder to add the interview resource to; Mutually exclusive to partyEmailAddress.
+          example: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+        partyEmailAddress:
+          type: string
+          description: The identifying party owner of the binder; Mutually exclusive to binderId.
+          example: user@xyzcompany.com
+        partnerEndUserId:
+          type: string
+          description: Identifies the Partner end user (optional).
+          example: cfd1ee5a-061a-40cc-be72-8cbb9945b5d9
+        templateId:
+          type: string
+          description: This value is required in order to create an interview for the desired template.
+          example: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+    InterviewCreateResponse:
+      type: object
+      properties:
+        interviewId:
+          type: string
+          description: Identifies this interview.
+          example: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+    InterviewResponse:
+      type: object
+      properties:
+        binder:
+          $ref: '#/components/schemas/Binder'
+        interview:
+          $ref: '#/components/schemas/Interview'
+        template:
+          $ref: '#/components/schemas/Template'
+    InterviewMetaDataResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          interviewName:
+            type: string
+            description: The interview name.
+            example: Employment contract
+          interviewId:
+            type: string
+            description: Identifies this interview.
+            example: 0af17ba7-f332-5346-bb3f-00b7c9af7deb
+          createdAt:
+            type: string
+            description: 'The date the resource was created.'
+            example: '2020-12-01T17:51:40.795Z'
+          updatedAt:
+            type: string
+            description: 'The date the resource was updated.'
+            example: '2021-12-01T18:51:40.795Z'
+          interviewStatus:
+            type: string
+            description: 'The status of the interview.'
+            example: 'Created'
+          partnerEndUserId:
+            type: string
+            description: Identifies the Partner end user.
+            example: cfd1ee5a-061a-40cc-be72-8cbb9945b5d9
+      example:
+        - interviewName: 'Employment contract'
+          interviewId: '0af17ba7-f332-5346-bb3f-00b7c9af7deb'
+          createdAt: '2020-12-01T17:51:40.795Z'
+          updatedAt: '2021-12-01T18:51:40.795Z'
+          interviewStatus: 'Created'
+          partnerEndUserId: 'cfd1ee5a-061a-40cc-be72-8cbb9945b5d9'
+        - interviewName: 'Lease Agreement'
+          interviewId: '88affc9b-4bbf-4336-86ef-5858e5c86555'
+          createdAt: '2021-01-12T13:29:24.362Z'
+          updatedAt: '2021-01-12T15:13:27.425Z'
+          interviewStatus: 'Completed'
+          partnerEndUserId: 'cfd1ee5a-061a-40cc-be72-8cbb9945b5d9'
+    Template:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The interview name
+        payload:
+          type: string
+          description: Template payload
+  securitySchemes:
+    bearerAuth:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: "JWT"
+security:
+  - bearerAuth: []

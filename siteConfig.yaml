@@ -29,9 +29,13 @@ login:
 toc:
   enable: true
 oasDefinitions:
-  signAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/Binders/v1/openapi.yaml
-  authenticationAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/AuthenticationAPI/v1/openapi.yaml
-  documentAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/DocumentAPI/v1/openapi.yaml
+  signAPI: ./openapi/rocketSignAPI.yaml
+  authenticationAPI: ./openapi/authenticationAPI.yaml
+  documentAPI: ./openapi/rocketDocumentAPI.yaml
+  observabilityAPI: ./openapi/observabilityAPI.yaml
+#  signAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/Binders/v1/openapi.yaml
+#  authenticationAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/AuthenticationAPI/v1/openapi.yaml
+#  documentAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/DocumentAPI/v1/openapi.yaml
   # add links to definitions in our API registry by using a fully qualified URL.
 stylesheets:
   - https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&display=swap

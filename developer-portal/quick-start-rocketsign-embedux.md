@@ -22,7 +22,7 @@ Getting started
 
 **Note:** Urls in this Quick Start use `api-sandbox.rocketlawyer.com`. For production, please use `api.rocketlawyer.com`.
 
-Each call to the **RocketSign & Binders API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the [Authentication API](../references/authentication.page.yaml):
+Each call to the **RocketSign & Binders API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the [Authentication API](../openapi/authentication.page.yaml):
 
     POST https://api-sandbox.rocketlawyer.com/partners/v1/auth/accesstoken
 
@@ -108,7 +108,7 @@ Go to your web browser, and open the url:
     https://document-manager.sandbox.rocketlawyer.com/{binderId}#serviceToken={serviceToken}
 
 *   `binderId` is the ID of your binder
-*   `serviceToken` is the service token you created in the previous steps. You can find more on access and service tokens on: [**Authentication API Documentation**](../references/authentication.page.yaml)
+*   `serviceToken` is the service token you created in the previous steps. You can find more on access and service tokens on: [**Authentication API Documentation**](../openapi/authentication.page.yaml)
 
 You can get the `binderId` from the document you have created yourself using the [**RocketDocument Embedded UX**](quick-start-rocketdoc-embedux.md)
 
@@ -117,7 +117,7 @@ You can get the `binderId` from the document you have created yourself using the
 
 After **RocketSign Embedded UX** loads, you should see your document ready for preparation and signing:
 
-![RocketSign Embedded UX](../images/ff358296-6dde-4630-9b66-bbe1f1ff9cf7.png)
+![RocketSign Embedded UX](images/ff358296-6dde-4630-9b66-bbe1f1ff9cf7.png)
 
 The document is now ready for the preparation and signing process:
 
@@ -178,5 +178,5 @@ Now that you can display and interact with your documents using **RocketSign Emb
 
 **API documentation**
 
-*   [RocketSign & Binders API documentation](../references/sign.page.yaml)
-*   [Authentication API documentation](../references/authentication.page.yaml)
+*   [RocketSign & Binders API documentation](../openapi/sign.page.yaml)
+*   [Authentication API documentation](../openapi/authentication.page.yaml)

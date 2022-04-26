@@ -26,7 +26,7 @@ Getting started
 
 **Note:** Urls in this Quick Start use `api-sandbox.rocketlawyer.com`. For production, please use `api.rocketlawyer.com`.
 
-Each call to the **RocketDocument API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the [Authentication API](../references/authentication.page.yaml):
+Each call to the **RocketDocument API** has to be authenticated. In order to obtain an Access Token, you must perform a call to the [Authentication API](../openapi/authentication.page.yaml):
 
     POST https://api-sandbox.rocketlawyer.com/partners/v1/auth/accesstoken
 
@@ -54,7 +54,7 @@ Assumptions for creating an interview:
 
 
 **Request**
-To create an interview, make a POST request to the interviews endpoint in the [RocketDocument API](../references/documentation.page.yaml):
+To create an interview, make a POST request to the interviews endpoint in the [RocketDocument API](../openapi/documentation.page.yaml):
 
     POST https://api-sandbox.rocketlawyer.com/rocketdoc/v1/interviews
 
@@ -99,7 +99,7 @@ The web component tag somewhere in the body of your html:
 
     <rocket-document serviceToken={rl-rdoc-servicetoken} interviewId={interview-id}></rocket-document>
 
- `{rl-rdoc-servicetoken}` is the service token from the previous step. You can find more on access and service tokens at [**Authentication API Documentation**](../references/authentication.page.yaml)
+ `{rl-rdoc-servicetoken}` is the service token from the previous step. You can find more on access and service tokens at [**Authentication API Documentation**](../openapi/authentication.page.yaml)
 
 `{interview-id}` is from the body of the response in the previous step. (not the same as template id)
 
@@ -126,7 +126,7 @@ A simplified webpage example:
 
 After RocketDocument Embedded UX loads, you should see your interview ready to be interacted with:
 
-![RocketDoocumentEmbedded UX](../images/RocketDocument-Embedded-Mobile.png)
+![RocketDoocumentEmbedded UX](images/RocketDocument-Embedded-Mobile.png)
 
 Congratulations! You have just displayed the document using **RocketDocument Embedded UX**
 
@@ -185,5 +185,5 @@ Now that you can create a document interview, display and interact with it, chec
 
 **API documentation**
 
-*   [RocketDocument API documentation](../references/documentation.page.yaml)
-*   [Authentication API documentation](../references/authentication.page.yaml)
+*   [RocketDocument API documentation](../openapi/documentation.page.yaml)
+*   [Authentication API documentation](../openapi/authentication.page.yaml)

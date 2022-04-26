@@ -20,12 +20,13 @@ import {
 
 import launchFastIcon from './images/launch-fast.svg';
 import bookManagementIcon from './images/book-management.svg';
+import paintIcon from './images/icons8-fill-color.png';
 
 export default LandingLayout;
 
 <Jumbotron py="1px">
   <NavBar location={props.location} standalone={false} />
-  <H1>Rocketlawyer Developer Center</H1>
+  <H1>RocketLawyer Developer Center</H1>
   <H2>Find APIs for custom, embedded end-to-end legal workflows.</H2>
 </Jumbotron>
 <Box my={55}>
@@ -38,6 +39,10 @@ export default LandingLayout;
        <b>Ready to try our APIs?</b><br/>
        Hit the groud running with Quick Start.
     </ThinTile>
+    <ThinTile to="developer-portal/customize-ux-products.md" icon={paintIcon} header="UI Customizations">
+       <b>Customize your app</b><br/>
+       Tailor your app to your brand.
+     </ThinTile>
   </FlexSection>
 </Box>
 
