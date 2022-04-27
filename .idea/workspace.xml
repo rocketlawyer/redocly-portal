@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4eee3c10-67f3-4f97-a239-298803eff516" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/google-java-format.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/redocly-portal.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/identity-provider/auth0/scripts/customClaimToken.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/identity-provider/auth0/scripts/universal_login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/identity-provider/auth0/scripts/validateOrgId.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +83,7 @@
       <workItem from="1650564277080" duration="595000" />
       <workItem from="1650569961416" duration="479000" />
       <workItem from="1650571110581" duration="23676000" />
-      <workItem from="1650924826877" duration="6897000" />
+      <workItem from="1650924826877" duration="8806000" />
     </task>
     <servers />
   </component>
