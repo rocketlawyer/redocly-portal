@@ -1,7 +1,7 @@
 meta:
-  title: Redocly Training
+  title: Rocket Laywer Developer Center
   description: The best API documentation generator ever.
-  siteUrl: https://developer-portal-starter.redoc.ly
+  siteUrl: https://portal-demo.redoc.ly
   keywords: redocly developer portal, api portal starter, api reference docs
   lang: en-US
 linkChecker:
@@ -10,11 +10,32 @@ linkChecker:
     CheckExternal: false
 logo:
   image: ./images/logo.png
-  altText: Redocly Training
+  altText: Rocket Lawyer
+login:
+  label: Sign in
+  userAvatar:
+    claim: picture
+    fallbackLettersClaim: fullName
+  userLabel:
+    claim: email
+    fallback: '<unknown user>'
+  menu:
+    - label: Apps
+      page: apps.mdx
+    - separatorLine: true
+    - label: Sign out
+      logout: true
+      link: 'https://rocketlawyer-developer-center.us.auth0.com/v2/logout?returnTo=https%3A%2F%2Frocketlawyer-developer-portal-internal.redoc.ly%2F&client_id=DiOfhHQb0wBxF0k1rMNm1eZwmdQM6S5I'
 toc:
   enable: true
 oasDefinitions:
-  petstore: ./openapi/petstore.yaml
+  signAPI: ./openapi/rocketSignAPI.yaml
+  authenticationAPI: ./openapi/authenticationAPI.yaml
+  documentAPI: ./openapi/rocketDocumentAPI.yaml
+  observabilityAPI: ./openapi/observabilityAPI.yaml
+#  signAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/Binders/v1/openapi.yaml
+#  authenticationAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/AuthenticationAPI/v1/openapi.yaml
+#  documentAPI: https://api.redocly.com/registry/bundle/rocket-lawyer/DocumentAPI/v1/openapi.yaml
   # add links to definitions in our API registry by using a fully qualified URL.
 stylesheets:
   - https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&display=swap
@@ -26,30 +47,17 @@ stylesheets:
 #scripts:
 #  - ./static/intercom.js
 nav:
-
-  - label: Training exercises
-    page: developer-portal/index.md
-
-  - label: External docs
-    icon: ./images/redocly-icon-white.png
-    href: https://redoc.ly/docs/developer-portal/introduction/
-
-  - search: true
+  - label: Home
+    page: index.mdx
+  - label: Quick Starts
+    page: ./developer-portal/quick-starts.mdx
+  - label: API Documentation
+    page: ./developer-portal/api-documentation.mdx
 
 footer:
-  copyrightText: Copyright © Redocly 2019-2021. All right reserved.
   columns:
     - group: Legal
       items:
         - label: Terms of Use
-          href: 'https://redoc.ly/subscription-agreement/'
-        - label: Privacy Notice
-          href: 'https://redoc.ly/privacy-notice/'
-        - label: Cookie Notice
-          href: 'https://redoc.ly/cookie-notice/'
-    - group: Support
-      items:
-        - label: FAQ
-          page: faq.md
-        - label: Contact us
-          page: contact.mdx
+          page: ./developer-portal/terms-and-conditions.md
+

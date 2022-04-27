@@ -1,0 +1,268 @@
+openapi: 3.0.0
+info:
+  title: Authentication API
+  version: 1.0.0
+  description: |
+    This API documentation describes the server-side contract by which your backend systems (running on your servers) can control the content each of your users can access within Rocket Lawyer.
+    Because our **Authentication API** is designed to be used as a complement to other APIs, you can find step-by-step instructions for how to generate access and/or service tokens in any of our <a href="https://rocketlawyer-developer-portal-internal.redoc.ly/developer-portal/quick-starts/">Quick Starts</a>.
+
+    ## Authentication overview
+    To get started with our **Authentication API**, it helps to first understand its purpose and coverage area.
+    **Authentication API** allows your backend systems to control the content each of your users can access within Rocket Lawyer. This allows you to seamlessly integrate Rocket Lawyer APIs into your existing application without requiring your users to keep track of separate login credentials.
+    Using the **Authentication API**, your backend systems have the ability to obtain:
+    1) **Backend Access Tokens**, which are intended for use by your backend systems for deep integrations with Rocket Lawyer data.
+    2) **Service Tokens**, which can be used by client applications (running on your user's device) to load an embedded Rocket Lawyer experience with a specific level of access (for example, loading a specific document in the Document Manager as its owner).
+    ## Getting started with Authentication API
+    To obtain a backend access token, you’ll need to issue a POST to /auth/accesstoken with valid credentials, as obtained from the developer center (API key and client secret — find instructions on how to get yours in our <a href="https://rocketlawyer-developer-portal-internal.redoc.ly/developer-portal/welcome-guide/">Welcome Guide</a>). The response will contain your access token (plus metadata to let you know important details like how long the token will remain valid). Your access token can then be passed as a bearer token in subsequent calls, as per [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750).
+
+  termsOfService: https://rocketlawyer-public-us.apigee.io/terms
+servers:
+  - url: 'https://api-sandbox.rocketlawyer.com/partners/v1/auth'
+    description: Sandbox
+  - url: 'https://api.rocketlawyer.com/partners/v1/auth'
+    description: Production
+paths:
+  /accesstoken:
+    post:
+      summary: Access Token Creation
+      description: >-
+        Request the creation of an Access Token, whether or not it be associated
+        with a Service Token. Requires passing credentials (App Key and Secret) in posted request body. For plain Access Tokens, grant type must be `client_credentials`. For Access Tokens associated with a Service Token, grant type must be `authorization_code` with Service Token passed in a request body field named `code`.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  fault:
+                    faultstring: Invalid Client Credentials
+                    detail:
+                      errorcode: Unauthorized
+
+  /servicetoken:
+    post:
+      summary: Service Token Creation
+      security:
+        - BearerTokenAuth: []
+      description: Request the creation of a Service Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceTokenRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceTokenResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                description: |
+                  Fault string is one of the following:
+                  - Access Token expired with code `keymanagement.service.access_token_expired`
+                  - Invalid Access Token with code `keymanagement.service.invalid_access_token`
+                example:
+                  fault:
+                    faultstring: Access Token expired
+                    detail:
+                      errorcode: keymanagement.service.access_token_expired
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Used for invalid combinations of purpose and properties
+                example:
+                  message: Request is missing mandatory fields or contains non-acceptable fields for purpose or purpose is invalid
+                  error: BAD_REQUEST
+                  status: 400
+                  timestamp: "2021-10-13T15:56:40.980+00:00"
+
+components:
+  schemas:
+
+    AccessTokenRequest:
+      required:
+        - client_id
+        - client_secret
+        - grant_type
+      properties:
+        client_id:
+          type: string
+          title: Application Key
+          description: Application Key
+        client_secret:
+          type: string
+          title: Application secret
+          description: Application secret
+        grant_type:
+          type: string
+          title: Value is client_credentials or authorization_code
+          description: >
+            #### Possible values:
+
+            - client_credentials : used to get an Access Token
+
+            - authorization_code : used to get an Access Token associated with Service Token passed in "code" field.
+        code:
+          type: string
+          title: Service Token
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyb2NrZXRsYXd5ZXIuY29tIiwiYXVkIjoicm9ja2V0bGF3eWVyLmNvbS9zZXJ2aWNlLXRva2VucyIsImV4cCI6MTY3MTc3NjU0MiwiaWF0IjoxNjMzOTcxNjg0LCJzcnYiOnsib3JpZ2luYWxUZW5hbnRJZCI6IjZiYmRkYzJjLTljN2MtNGVhZC05Y2E5LWJkYTRmZDc4YWNjNSIsImV4cGlyYXRpb25UaW1lIjoxNjcxNzc2NTQyLCJwYXJ0bmVySWQiOiIwZDc5MGY5ZC03ZmY5LTRiYzItODU3Ny0yNTVlYWY0NTk0YzAiLCJvcmlnaW5hbENsaWVudElkIjoiN2ZiOWMwMDMtYjc3Ny00MGM2LWFkZTAtYWM5NDVjOWQ3MTBiIiwicHVycG9zZSI6ImFwaS5yb2NrZXRsYXd5ZXIuY29tL2RlbW8vdGhpbmdzIiwiYnJhbmRJZCI6IjVkZWQwYWNiLTJjZDItNDA1Zi05NTY4LTk5NmU0ODBmZjQ2NiIsIm93bmVyIjoidXNlcjEifX0.L6nwZ0vOb6wUpZUbrfxW1BfIs54aKodfgqo36ymlNBY
+          description: Service Token obtained from /servicetoken endpoint
+      example:
+        client_id: your-apigee-app-key
+        client_secret: your-apigee-app-secret
+        grant_type: client_credentials
+
+    AccessTokenResponse:
+      properties:
+        organization_name:
+          type: string
+          title: Organization Name
+          example: rocketlawyer-internal
+        developer.email:
+          type: string
+          title: Developer Email Address
+          example: pdu-test-automation@rocketlawyer.com
+        issued_at:
+          type: string
+          title: Issue timestamp in millis
+          example: "1633969487428"
+        client_id:
+          type: string
+          title: Apigee App Key (echoes request Client ID)
+          example: your-apigee-app-key
+        token_type:
+          type: string
+          title: Token Type
+          example: BearerToken
+        access_token:
+          type: string
+          title: Access Token
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyb2NrZXRsYXd5ZXIuY29tIiwiYXVkIjoicm9ja2V0bGF3eWVyLmNvbS9hY2Nlc3MtdG9rZW5zIiwiZXhwIjoxNjM0MDA3Njg1LCJpYXQiOjE2MzM5NzE2ODUsInJsX2FwaV9jbGllbnRfaWQiOiI3ZmI5YzAwMy1iNzc3LTQwYzYtYWRlMC1hYzk0NWM5ZDcxMGIiLCJybF91c2VyX2lkIjpudWxsLCJzcnYiOnsib3JpZ2luYWxUZW5hbnRJZCI6IjZiYmRkYzJjLTljN2MtNGVhZC05Y2E5LWJkYTRmZDc4YWNjNSIsImV4cGlyYXRpb25UaW1lIjoxNjcxNzc2NTQyLCJwYXJ0bmVySWQiOiIwZDc5MGY5ZC03ZmY5LTRiYzItODU3Ny0yNTVlYWY0NTk0YzAiLCJvcmlnaW5hbENsaWVudElkIjoiN2ZiOWMwMDMtYjc3Ny00MGM2LWFkZTAtYWM5NDVjOWQ3MTBiIiwicHVycG9zZSI6ImFwaS5yb2NrZXRsYXd5ZXIuY29tL2RlbW8vdGhpbmdzIiwiYnJhbmRJZCI6IjVkZWQwYWNiLTJjZDItNDA1Zi05NTY4LTk5NmU0ODBmZjQ2NiIsIm93bmVyIjoidXNlcjEifSwiY2kiOm51bGx9.IFtBrtt5b8MYuOn5T4WITIUNpiq-VM-rgkybXkAt3iQ"
+        application_name:
+          type: string
+          title: Appigee Application ID
+          example: 4e8dc68b-cc3c-4ffc-aab3-f76f817ad321
+        expires_in:
+          type: string
+          title: Number of seconds
+          example: "35998"
+        api_product_list:
+          type: array
+          title: Api Products that application is subscribed to
+          example:
+            - partner-auth-service-product-dev
+            - binders-product-Tests
+            - demo-products
+
+    ServiceTokenRequest:
+      required:
+        - purpose
+        - expirationTime
+      properties:
+        purpose:
+          type: string
+          title: Purpose
+          example: api.rocketlawyer.com/demo/things
+          description: >-
+            Purpose denotes the domain or the targeted service that consumes the
+            service (~ service token). Purposes are registered in PAS and only registered purposes are allowed. Purpose is registered alongside property names and only associated property names can be used when requesting a service token.
+        expirationTime:
+          type: integer
+          title: Expiration Time
+          example: 1671776542
+          description: >-
+            Expressed as a number of seconds elapsed since the Epoch. Cannot denote a value in the past (with regards to when request hits the application endpoint).
+      additionalProperties:
+        title: Purpose dependent properties
+        description: |
+          Custom properties that depend on the purpose. For instance, Universal
+          Party Identifier `upid` is required for binders but not for other purposes. Also, request is deemed invalid (400) if it contains fields not allowed for the purpose.
+          ### Binders
+          ```
+          {
+            "purpose" : "api.rocketlawyer.com/document-manager/v1/binders",
+            "expirationTime" : 1671776542,
+            "upid" : "d25eb612-17c2-4e58-9700-28bfa25e0df0"
+          }
+          ```
+
+    ServiceTokenResponse:
+      required:
+        - purpose
+        - expirationTime
+        - token
+      properties:
+        purpose:
+          type: string
+          title: Purpose
+          description: echoes request value
+          example: api.rocketlawyer.com/document-manager/v1/binders
+        expirationTime:
+          type: integer
+          title: Expiration Time
+          description: echoes request value
+          example: 1607803932
+        token:
+          type: string
+          format: jwt
+          title: Service Token
+          description: >
+            Service Token in JWT format
+
+            #### JWT decoded payload
+
+            Service Data `srv` contains:
+
+            - Custom properties that were present in request
+
+            - System values automatically added by service (e.g. brand and
+            partner)
+
+            ```
+
+            {
+              "iss": "rocketlawyer.com",
+              "aud": "rocketlawyer.com/service-tokens",
+              "exp": 1671776542,
+              "iat": 1633971684,
+              "srv": {
+                "originalTenantId": "6bbddc2c-9c7c-4ead-9ca9-bda4fd78acc5",
+                "expirationTime": 1671776542,
+                "partnerId": "0d790f9d-7ff9-4bc2-8577-255eaf4594c0",
+                "originalClientId": "7fb9c003-b777-40c6-ade0-ac945c9d710b",
+                "purpose": "api.rocketlawyer.com/demo/things",
+                "brandId": "5ded0acb-2cd2-405f-9568-996e480ff466",
+                "owner": "user1"
+              }
+            }
+
+            ```
+          example: >-
+            eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyb2NrZXRsYXd5ZXIuY29tIiwiYXVkIjoicm9ja2V0bGF3eWVyLmNvbS9zZXJ2aWNlLXRva2VucyIsImV4cCI6MTY3MTc3NjU0MiwiaWF0IjoxNjMzOTcxNjg0LCJzcnYiOnsib3JpZ2luYWxUZW5hbnRJZCI6IjZiYmRkYzJjLTljN2MtNGVhZC05Y2E5LWJkYTRmZDc4YWNjNSIsImV4cGlyYXRpb25UaW1lIjoxNjcxNzc2NTQyLCJwYXJ0bmVySWQiOiIwZDc5MGY5ZC03ZmY5LTRiYzItODU3Ny0yNTVlYWY0NTk0YzAiLCJvcmlnaW5hbENsaWVudElkIjoiN2ZiOWMwMDMtYjc3Ny00MGM2LWFkZTAtYWM5NDVjOWQ3MTBiIiwicHVycG9zZSI6ImFwaS5yb2NrZXRsYXd5ZXIuY29tL2RlbW8vdGhpbmdzIiwiYnJhbmRJZCI6IjVkZWQwYWNiLTJjZDItNDA1Zi05NTY4LTk5NmU0ODBmZjQ2NiIsIm93bmVyIjoidXNlcjEifX0.L6nwZ0vOb6wUpZUbrfxW1BfIs54aKodfgqo36ymlNBY
+
+  securitySchemes:
+    BearerTokenAuth:
+      type: http
+      scheme: bearer
