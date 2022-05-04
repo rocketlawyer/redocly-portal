@@ -13,7 +13,7 @@ info:
     1) **Backend Access Tokens**, which are intended for use by your backend systems for deep integrations with Rocket Lawyer data.
     2) **Service Tokens**, which can be used by client applications (running on your user's device) to load an embedded Rocket Lawyer experience with a specific level of access (for example, loading a specific document in the Document Manager as its owner).
     ## Getting started with Authentication API
-    To obtain a backend access token, you’ll need to issue a POST to /auth/accesstoken with valid credentials, as obtained from the developer center (API key and client secret — find instructions on how to get yours in our <a href="https://rocketlawyer-developer-portal-internal.redoc.ly/developer-portal/welcome-guide/">Welcome Guide</a>). The response will contain your access token (plus metadata to let you know important details like how long the token will remain valid). Your access token can then be passed as a bearer token in subsequent calls, as per [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750).
+    To obtain a backend access token, you’ll need to issue a POST to /auth/accesstoken with valid credentials, as obtained from the developer center (API key and client secret — find instructions on how to get yours in our <a href={{process.env.WELCOME_GUIDE}}>Welcome Guide</a>). The response will contain your access token (plus metadata to let you know important details like how long the token will remain valid). Your access token can then be passed as a bearer token in subsequent calls, as per [RFC 6750](https://datatracker.ietf.org/doc/html/rfc6750).
 
   termsOfService: https://rocketlawyer-public-us.apigee.io/terms
 servers:

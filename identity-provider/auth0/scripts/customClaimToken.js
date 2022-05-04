@@ -1,5 +1,5 @@
 function (user, context, callback) {
     const namespace = 'https://redocly-namespace/';
-    context.idToken[namespace + 'orgId'] = user.user_metadata.orgId;
+    context.idToken[namespace + 'orgUuId'] = user.user_metadata.orgUuid;
     return callback(null, user, context);
 }
