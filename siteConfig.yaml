@@ -12,7 +12,7 @@ logo:
   image: ./images/logo.png
   altText: Rocket Lawyer
 login:
-  label: Sign in
+  label: Developer Account
   userAvatar:
     claim: picture
     fallbackLettersClaim: fullName
@@ -55,9 +55,14 @@ nav:
     page: ./developer-portal/api-documentation.mdx
 
 footer:
+  copyrightText: Copyright © Redocly 2019-2021. All right reserved.
   columns:
     - group: Legal
       items:
-        - label: Terms of Use
-          page: ./developer-portal/terms-and-conditions.md
+        - label: Home
+          page: index.mdx
+        - label: Terms and Conditions
+          page:  ./developer-portal/terms-and-conditions.md
+        - label: Go to Rocketlawyer.com
+          href: 'https://www.rocketlawyer.com/'
 

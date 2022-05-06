@@ -30,6 +30,11 @@
     if (config.dict && config.dict.signin && config.dict.signin.title) {
         languageDictionary = {
             title: config.dict.signin.title,
+            signUpTitle: 'Create an account',
+            signUpLabel: 'Create an account',
+            signUpSubmitLabel: 'Create Account',
+            loginLabel: 'Sign In',
+            loginSubmitLabel: 'Sign In',
             error: {
                 signUp: {
                     'lock.fallback':
@@ -38,7 +43,8 @@
             },
             success: {
                 signUp: 'Thanks for signing up.Please verify your email'
-            }
+            },
+            signUpTerms: "I agree to the <a href='https://rocketlawyer-developer-portal-internal.redoc.ly/developer-portal/terms-and-conditions/'>terms."
         };
     } else if (typeof config.dict === 'string') {
         language = config.dict;
@@ -59,10 +65,20 @@
             __tenant: config.auth0Tenant,
             __token_issuer: config.authorizationServer.issuer
         },
-        additionalSignUpFields: [{
-            name: "orgId",
-            placeholder: "Enter org id",
-        }],
+        additionalSignUpFields: [
+            {
+                name: "first_name",
+                placeholder: "Enter your First Name"
+            },
+            {
+                name: "last_name",
+                placeholder: "Enter your Last Name"
+            },
+            {
+                name: "companyId",
+                placeholder: "Enter Company ID",
+            }],
+        mustAcceptTerms: true,
         assetsUrl:  config.assetsUrl,
         allowedConnections: connection ? [connection] : null,
         rememberLastLogin: !prompt,
