@@ -3,22 +3,29 @@ import {
   FlexSection,
   Flex,
   WideTile,
+  ThinTile,
   Emphasis,
+  SectionHeader,
   H1,
-  H2
+  H2,
+  Jumbotron,
+  FullWidthLayout
 } from '@redocly/developer-portal/ui';
 
-import launchFastIcon from '../images/launch-fast.svg';
-import bookManagementIcon from '../images/book-management.svg';
+import rocketSign from './images/rocketsign-logo.svg';
+import rocketDoc from './images/icons8-questionnaire-96.png';
+import Title from  '../components/Title.tsx';
+
+export default FullWidthLayout;
 
 <Box my={55}>
   <FlexSection justifyContent="space-around" flexWrap="wrap">
-    <WideTile to="quick-start-rocketdoc-embedux.md"  header="RocketDoument Embedded UX">
+    <ThinTile to="quick-start-rocketdoc-embedux.md" icon={rocketDoc} header="RocketDoument Embedded UX">
        Make and customize a document without building your own UX.
-    </WideTile>
-    <WideTile to="quick-start-rocketsign-embedux.md"  header="RocketSign Embedded UX">
-       Sign a document and invite others to sign without building your own UX.
-    </WideTile>
+    </ThinTile>
+    <ThinTile to="quick-start-rocketsign-embedux.md" icon={rocketSign} header="RocketSign Embedded UX">
+      Sign a document and invite others to sign without building your own UX.
+    </ThinTile>
   </FlexSection>
 </Box>
 

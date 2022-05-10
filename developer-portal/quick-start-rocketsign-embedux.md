@@ -31,7 +31,7 @@ with correct credentials (`client_id` and `client_secret`) and `grant_type`:
     {
         "client_id": "{api-key}",
         "client_secret": "{api-secret}",
-        "grant_type": "client\_credentials"
+        "grant_type": "client_credentials"
     }
 The response will contain an Access Token (amongst other data):
 
