@@ -2,26 +2,31 @@ import {
   Box,
   FlexSection,
   Flex,
-  WideTile,
+  ThinTile,
   Emphasis,
   H1,
   H2
 } from '@redocly/developer-portal/ui';
 
+import rocketSign from './images/rocketsign-logo.svg';
+import rocketDoc from './images/icons8-questionnaire-96.png';
+import authentication from './images/icons8-key-96.png';
+import observability from './images/icons8-astronomy-96.png';
+
 <Box my={55}>
   <FlexSection justifyContent="space-around" flexWrap="wrap">
-    <WideTile to="../openapi/documentation.page.yaml"  header="RocketDoument API">
+  <ThinTile to="../openapi/documentation.page.yaml" icon={rocketDoc} header="RocketDoument API">
        Enable your customers to make and customize legal documents.
-    </WideTile>
-    <WideTile to="../openapi/sign.page.yaml"  header="RocketSign and Binders API">
-       Enable your customers to sign documents and invite others to sign.
-    </WideTile>
-    <WideTile to="../openapi/authentication.page.yaml"  header="Authentication API">
-        Control access to resources within anyof our APIs.
-     </WideTile>
-     <WideTile to="../openapi/observability.page.yaml"  header="Observability API">
-         Enable yourself to subscribe and pull events from Rocket Lawyer.
-     </WideTile>
+    </ThinTile>
+    <ThinTile to="../openapi/sign.page.yaml" icon={rocketSign} header="RocketSign and Binders API">
+      Enable your customers to sign documents and invite others to sign.
+    </ThinTile>
+    <ThinTile to="../openapi/authentication.page.yaml" icon={authentication} header="Authentication API">
+      Sign a document and invite others to sign without building your own UX.
+    </ThinTile>
+    <ThinTile to="../openapi/observability.page.yaml" icon={observability} header="Observability API">
+     Enable yourself to subscribe and pull events from Rocket Lawyer.
+    </ThinTile>
   </FlexSection>
 </Box>
 
