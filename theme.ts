@@ -1,4 +1,14 @@
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { red } from '@mui/material/colors';
 import { lighten, darken, readableColor } from 'polished';
+
+export const themeMui = createTheme({
+  palette: {
+    primary: {
+      main: red[700],
+    },
+  },
+});
 
 export const theme = {
   // spacing: {
