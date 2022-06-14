@@ -1,0 +1,37 @@
+Request Access Token
+
+curl --request POST \                                                        
+
+  --url https://rocketlawyer-developer-center.us.auth0.com/oauth/token \
+
+  --header 'content-type: application/json' \
+
+  --data '{"client_id":”CLIENT_ID”, "client_secret":"CLIENT_SECRET", "audience":"https://rocketlawyer-developer-center.us.auth0.com/api/v2/","grant_type":"client_credentials"}'
+
+Create a User
+
+url : https://rocketlawyer-developer-center.us.auth0.com/api/v2/users
+body : 
+{
+ "email":"john.doe@rocketlawyer.com",
+ "user_metadata":
+    {"first_name":"john","last_name":"doe","companyId":"0001","orgUuid":"64db3d28-78c4-4fc1-bef4-55d07782879b"},"email_verified":true,
+        "app_metadata":{
+            "invitedToMyApp": true
+        },
+        "name":"john.doe@rocketlawyer,com",
+        "nickname":"adale",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"dummy1234"
+        
+}
+
+Send Change password email:
+
+curl --request POST \
+
+  --url 'https://rocketlawyer-developer-center.us.auth0.com/dbconnections/change_password' \
+
+  --header 'content-type: application/json' \
+
+  --data '{"client_id": "CLIENT_ID","email": "john.doe@rocketlawyer.com","connection": "redocly-dev-portal"}'
