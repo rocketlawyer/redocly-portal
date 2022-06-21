@@ -12,12 +12,12 @@ export default function AppApisSelection({
 }) {
   return (
     <Grid container sx={{ pt: 2, pb: 2 }}>
-      <Grid item xs={4}>
+      <Grid item xs={12} lg={3}>
         <Typography variant="h5" gutterBottom component="div">
           APIs *
         </Typography>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item xs={12} lg={9}>
         <Typography variant="h6" gutterBottom component="div">
           <Lock fontSize="small" />Indicates approval is required before access to the API is granted.
         </Typography>

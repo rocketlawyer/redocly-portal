@@ -8,9 +8,9 @@ import { APIClientContext } from '../services/APIClientProvider';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../services/config';
 import ProtectedRoute from './ProtectedRoute';
-import AppOverview from '../components/app-form/overview';
-import AppOwner from '../components/app-form/owner';
-import AppApisSelection from '../components/app-form/apis-selection';
+import AppOverview from '../components/app-form/Overview';
+import AppOwner from '../components/app-form/Owner';
+import AppApisSelection from '../components/app-form/ApisSelection';
 
 export function CreateAppPage() {
   return <ProtectedRoute component={<CreateAppPageInternal />} />;
@@ -24,6 +24,7 @@ function CreateAppPageInternal() {
   const creatingAppResult = useMutation(() => apiClient!.createDeveloperApp(name, enabledApis), {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY_APPS);
+      apiClient!.createDeveloperAppKey(name, enabledApis, [{ name: 'description', value: description }]);
     },
   });
 

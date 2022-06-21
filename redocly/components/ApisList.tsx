@@ -17,7 +17,8 @@ export default function ApisList(props: {
     {
       field: 'displayName',
       headerName: 'Name',
-      width: 250,
+      minWidth: 250,
+      flex: 2,
       renderCell: (params: GridRenderCellParams<ApiProduct>) => (
         <Box sx={{ display: 'flex' }}>
           {params.row.approvalType === 'auto' ?
@@ -30,13 +31,15 @@ export default function ApisList(props: {
       field: 'description',
       headerName: 'Description',
       sortable: false,
-      width: 250
+      minWidth: 250,
+      flex: 3,
     },
     {
       field: 'status',
       headerName: 'Status',
       sortable: false,
-      width: 140,
+      minWidth: 140,
+      flex: 1,
       renderCell: (params: GridRenderCellParams<ApiProduct>) => (
         <Box sx={{ display: 'flex' }}>
           {isApiSelected(params.row.displayName) ? (
@@ -49,7 +52,8 @@ export default function ApisList(props: {
       field: 'createdAt',
       headerName: 'Actions',
       sortable: false,
-      width: 120,
+      minWidth: 120,
+      flex: 1,
       renderCell: (params: GridRenderCellParams<ApiProduct>) => (
         <Button
           variant="outlined"

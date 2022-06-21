@@ -12,12 +12,12 @@ export default function AppOverview(props: AppOverviewProps) {
 
   return (
     <Grid container sx={{ pt: 5, pb: 2 }}>
-      <Grid item xs={4}>
+      <Grid item lg={3} xs={12}>
         <Typography variant="h5" gutterBottom component="div">
           Overview
         </Typography>
       </Grid>
-      <Grid item xs={8}>
+      <Grid item lg={9} xs={12}>
         <TextField
           fullWidth
           id="app-name"
@@ -28,16 +28,16 @@ export default function AppOverview(props: AppOverviewProps) {
           variant="standard"
         />
         {!props.nameIsValid && props.nameTouched && (
-          <Alert severity="error" sx={{mt: 2}}>
+          <Alert severity="error" sx={{ mt: 2 }}>
             The app name can include only alphanumeric, space, and the following: _ - . # $ %. Must begin with an alpha character.
           </Alert>
         )}
         {props.nameIsTooLong &&
-          <Alert severity="error" sx={{mt: 2}}>
+          <Alert severity="error" sx={{ mt: 2 }}>
             App name is too long
           </Alert>
         }
-        <TextField
+        {/* <TextField
           fullWidth
           id="app-description"
           label="Description"
@@ -45,7 +45,18 @@ export default function AppOverview(props: AppOverviewProps) {
           variant="standard"
           onChange={changeAppDescription}
           sx={{ mt: 2 }}
-        />
+        /> */}
+        {props.appId && (
+          <TextField
+            disabled
+            fullWidth
+            id="app-id"
+            label="App Id"
+            value={props.appId}
+            variant="standard"
+            sx={{ mt: 2 }}
+          />
+        )}
       </Grid>
     </Grid>
   );
