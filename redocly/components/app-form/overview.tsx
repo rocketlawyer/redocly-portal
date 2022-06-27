@@ -37,7 +37,7 @@ export default function AppOverview(props: AppOverviewProps) {
             App name is too long
           </Alert>
         }
-        {/* <TextField
+        <TextField
           fullWidth
           id="app-description"
           label="Description"
@@ -45,7 +45,7 @@ export default function AppOverview(props: AppOverviewProps) {
           variant="standard"
           onChange={changeAppDescription}
           sx={{ mt: 2 }}
-        /> */}
+        />
         {props.appId && (
           <TextField
             disabled

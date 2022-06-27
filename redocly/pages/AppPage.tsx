@@ -12,8 +12,8 @@ import ProtectedRoute from './ProtectedRoute';
 import AppOverview from '../components/app-form/Overview';
 import AppOwner from '../components/app-form/Owner';
 import AppApisSelection from '../components/app-form/ApisSelection';
-import { App, Attribute } from '../services/apigee-api-types';
-import ApiKeys from '../components/app-form/ApiKeys';
+import { ApiProduct, App, Attribute, Attributes } from '../services/apigee-api-types';
+import ApiKeys from '../components/app-form/api-keys/ApiKeys';
 
 export function AppPage(_props: { path?: string }) {
   const pathPrefix = usePathPrefix();
@@ -30,15 +30,17 @@ function AppPageInternal(_props: { path?: string }) {
 
   const queryClient = useQueryClient();
 
-  const getAppDisplayName = (attributes?: Attribute[]) => {
-    return attributes?.find(attr => attr?.name === 'DisplayName')?.value;
+  const getAppAttribute = (attributes: Attribute[], attrName: string): any => {
+    return attributes?.find(attr => attr?.name === attrName)?.value;
   }
 
   // Load App
   const setValues = (data: App) => {
-    setName(getAppDisplayName(data?.attributes) || data.name || '');
-    setAppId(data.appId);
+    setName(getAppAttribute(data?.attributes, Attributes.displayName) || data.name || '');
+    setAppId(data.appId || '');
     setAppData(data);
+    setDescription(getAppAttribute(data?.attributes, Attributes.description) || '');
+    setEnabledApis(getApiProductsName(data?.attributes));
   }
 
   const { isLoading, error } = useQuery<any, Error, App>(QUERY_KEY_APP, () =>
@@ -46,10 +48,6 @@ function AppPageInternal(_props: { path?: string }) {
     {
       onSuccess: setValues
     }
-  );
-
-  const { isLoading: isLoadingApiProducts, error: apiProductsError, data: apiProducts } = useQuery<any, Error, App>(QUERY_KEY_PRODUCTS, () =>
-    apiClient?.getApiProducts(),
   );
 
   // Overview
@@ -61,15 +59,6 @@ function AppPageInternal(_props: { path?: string }) {
   const nameIsValid = /^[a-z][a-z0-9._\-$%#\s]*$/gi.test(name);
   const nameIsTooLong = name.length >= 100;
 
-  const { mutateAsync, isLoading: isLoadingResult, error: resultError } = useMutation(
-    () => apiClient!.renameDeveloperApp(appData.name, name),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(QUERY_KEY_APPS);
-      }
-    }
-  );
-
   const handleChangeName = (appName: string) => {
     setName(appName);
     setInputTouched(true);
@@ -80,13 +69,20 @@ function AppPageInternal(_props: { path?: string }) {
   };
 
   // Owner
-  const appOwner = `Me(${apiClient.email})`;
+  const appOwner = `Me(${apiClient!.email})`;
 
   // APIs Keys
-  const [enabledApis, setEnabledApis] = React.useState<string[]>([]);
 
   const { mutateAsync: revokeApi, isLoading: isLoadingApiRevoke } = useMutation(
-    (consumerKey: string) => apiClient!.deleteDeveloperAppKey(appData.name, consumerKey)
+    (consumerKey: string) => apiClient!.deleteDeveloperAppKey(appData.name, consumerKey),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(QUERY_KEY_APP);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(QUERY_KEY_APP);
+      },
+    }
   );
 
   const handleApiRevoke = (consumerKey: string) => {
@@ -98,15 +94,27 @@ function AppPageInternal(_props: { path?: string }) {
   }
 
   // Enabled APIs
-  const { mutateAsync: addApiKey, isLoading: isLoadingAddApiKey } = useMutation(
-    () => apiClient!.createDeveloperAppKey(appData.name, getApiProductsName(), [])
+  const [enabledApis, setEnabledApis] = React.useState<string[]>([]);
+  const {data: apiProductData, isLoading: isLoadingApiProducts, error: apiProductsError,} = useQuery<any, Error, { apiProduct: ApiProduct[] }>(
+    QUERY_KEY_PRODUCTS,
+    () => apiClient?.getApiProducts(),
   );
 
-  const getApiProductsName = () => {
-    return appData.credentials[0] ? appData.credentials[0].apiProducts.reduce((currList, currValue) => {
-      currList.push(currValue.apiproduct);
+  const { mutateAsync: addApiKey, isLoading: isLoadingAddApiKey } = useMutation(
+    () => apiClient!.createDeveloperAppKey(appData.name, getApiProductsName(appData.attributes), []),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(QUERY_KEY_APP);
+      },
+    },
+  );
+
+  const getApiProductsName = (attributes: Attribute[]): string[] => {
+    const apiProducts = JSON.parse(getAppAttribute(attributes, Attributes.apiProducts));
+    return apiProducts ? apiProducts.reduce((currList: string[], currValue: string) => {
+      currList.push(currValue);
       return currList;
-    }, []) : [];
+    }, []): [];
   }
 
   const handleApisChange = (apis: string[]) => {
@@ -114,16 +122,37 @@ function AppPageInternal(_props: { path?: string }) {
   };
 
   // Page
+  const { mutateAsync: saveAppAsync, isLoading: isLoadingResult, error: resultError } = useMutation(
+    () => apiClient!.updateCustomDeveloperApp(appData.name, enabledApis, description),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(QUERY_KEY_APPS);
+      }
+    }
+  );
+
+  const { mutateAsync: deleteAppAsync, isLoading: isDeleting, error: errorOnDeletion } = useMutation(
+    () => apiClient!.deleteDeveloperApp(appData.name),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(QUERY_KEY_APPS);
+      }
+    }
+  );
+
   const handleSave = async () => {
-    mutateAsync();
+    console.log(enabledApis);
+    await saveAppAsync();
+    navigate('/apps/');
   };
 
   const handleCancel = () => {
     navigate('/apps/');
   };
 
-  const handleDelete = () => {
-    //delete
+  const handleDelete = async () => {
+    await deleteAppAsync();
+    navigate('/apps/');
   }
 
   const handleReset = () => {
@@ -131,7 +160,7 @@ function AppPageInternal(_props: { path?: string }) {
   };
 
   const canReset = () => {
-    return getAppDisplayName(appData.attributes) !== name;
+    return getAppAttribute(appData?.attributes, Attributes.displayName) !== name;
   }
 
   return (
@@ -158,22 +187,16 @@ function AppPageInternal(_props: { path?: string }) {
             appId={appId}
             isLoadingApiRevoke={isLoadingApiRevoke}
             handleApiRevoke={handleApiRevoke}
+            addApiKey={handleAddApiKey}
+            isLoadingAddApiKey={isLoadingAddApiKey}
           />
-          <Button
-            color="primary"
-            variant="contained"
-            sx={{ mb: 2 }}
-            onClick={handleAddApiKey}
-          >
-            Add Key
-          </Button>
           <Divider />
           <AppApisSelection
             isLoading={isLoadingApiProducts}
             enabledApis={enabledApis}
             handleApisChange={handleApisChange}
             error={apiProductsError}
-            data={apiProducts}
+            data={apiProductData}
           />
           {error &&
             <Alert severity="error">

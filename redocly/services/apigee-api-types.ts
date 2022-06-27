@@ -56,3 +56,9 @@ export interface ApiProduct {
   createdAt: string;
   lastModifiedAt: string;
 }
+
+export enum Attributes {
+  description = 'description',
+  displayName = 'displayName',
+  apiProducts = 'apiProducts'
+}

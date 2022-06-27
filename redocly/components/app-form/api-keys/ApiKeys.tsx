@@ -1,13 +1,14 @@
 import * as React from 'react';
 
-import { Box, Button, Grid, Typography } from "@mui/material";
-import CircularProgress from '../common-elements/CircularProgress';
-import { ApiProduct } from "../../services/apigee-api-types";
+import { Box, Grid, Typography } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
+import { ApiProduct } from "../../../services/apigee-api-types";
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { App, Credential } from '@redocly/developer-portal/dist/engine/src/apigee/services/apigee-api-types';
+import { Credential } from '@redocly/developer-portal/dist/engine/src/apigee/services/apigee-api-types';
 import ApiKeyCell from './ApiKeyCell';
 import ApiKeySecretCell from './ApiKeySecretCell';
 import ApiKeyStatusCell from './ApiKeyStatusCell';
+import CreateNewApiKeyDialog from './CreateNewApiKeyDialog';
 
 export function getReadableDate(date: number) {
   const localeStringOptions = {
@@ -20,7 +21,7 @@ export function getReadableDate(date: number) {
   return new window.Date(date).toLocaleString('en-US', localeStringOptions);
 }
 
-export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoadingApiRevoke }) {
+export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoadingApiRevoke, addApiKey, isLoadingAddApiKey }) {
   const columns: GridColDef[] = [
     {
       field: 'consumerKey',
@@ -72,7 +73,7 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
       minWidth: 170,
       renderCell: (params: GridRenderCellParams<ApiProduct>) => (
         <Box sx={{ display: 'flex' }}>
-          { params.row.expiresAt > 0 ? getReadableDate(params.row.expiresAt) : 'Never' }
+          {params.row.expiresAt > 0 ? getReadableDate(params.row.expiresAt) : 'Never'}
         </Box>
       )
     },
@@ -82,29 +83,30 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
       sortable: false,
       width: 100,
       renderCell: (params: GridRenderCellParams<ApiProduct>) => (
-        <Button
-          variant="outlined"
-          color="primary"
+        <LoadingButton
           size="small"
-          sx={{ m: 'auto', ml: 2 }}
-          tabIndex={params.hasFocus ? 0 : -1}
-          disabled={isLoadingApiRevoke}
           onClick={() => revokeApi(params.row.consumerKey)}
+          loading={isLoadingApiRevoke}
+          loadingIndicator="Revoking"
+          variant="outlined"
         >
-          {isLoadingApiRevoke && <CircularProgress size={18} />}
           Revoke
-        </Button>
+        </LoadingButton>
       )
     }
   ];
 
   const revokeApi = (consumerKey: string) => {
     handleApiRevoke(consumerKey);
-  }
+  };
 
   const handleGetRowId = (credential: Credential) => {
     return `${appId}${credential.consumerKey}`;
-  }
+  };
+
+  const handleAddApiKey = () => {
+    addApiKey();
+  };
 
   return (
     <Grid container sx={{ pt: 5, pb: 2, maxWidth: '100%', overflow: 'auto' }}>
@@ -114,7 +116,7 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
         </Typography>
       </Grid>
       <Grid item lg={9} xs={12}>
-        <div style={{ display: 'flex', height: '100%' }}>
+        <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
           <div style={{ flexGrow: 1 }}>
             <DataGrid
               rows={credentials}
@@ -130,6 +132,12 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
               }}
             />
           </div>
+          <Box sx={{mt: 2}}>
+            <CreateNewApiKeyDialog
+              onConfirmation={handleAddApiKey}
+              isLoadingAddApiKey={isLoadingAddApiKey}
+            />
+          </Box>
         </div>
       </Grid>
     </Grid>

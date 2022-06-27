@@ -2,15 +2,47 @@ import * as React from 'react';
 
 import { APIClient, APIGEE_VERSION, APIGEE_PROXY_URL, APIGEE_ORG_NAME } from '@redocly/developer-portal/apigee';
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
+import { Attributes } from './apigee-api-types';
 
-export const APIClientContext = React.createContext<{ apiClient: APIClient | null }>({
+export const APIClientContext = React.createContext<{ apiClient: CustomApiClient | null }>({
   apiClient: null,
 });
 
+export class CustomApiClient extends APIClient {
+  createCustomDeveloperApp(appName: string, apiProducts: string[], description: string) {
+    return this.fetchData(`${this.developerUrl}/apps`, {
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        name: appName,
+        apiProducts,
+        attributes: [
+          { name: Attributes.displayName, value: appName },
+          { name: Attributes.description, value: description },
+          { name: Attributes.apiProducts, value: JSON.stringify(apiProducts) },
+        ]
+      }),
+      method: "POST"
+    });
+  }
+  updateCustomDeveloperApp(appName: string, apiProducts: string[], description: string) {
+    return this.fetchData(`${this.developerUrl}/apps/${appName}`, {
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        attributes: [
+          { name: Attributes.displayName, value: appName },
+          { name: Attributes.description, value: description },
+          { name: Attributes.apiProducts, value: JSON.stringify(apiProducts) },
+        ]
+      }),
+      method: "PUT"
+    });
+  }
+}
+
 setLogger({
-  log: () => {},
-  warn: () => {},
-  error: () => {},
+  log: () => { },
+  warn: () => { },
+  error: () => { },
 });
 
 if (!APIGEE_PROXY_URL) {
@@ -26,7 +58,7 @@ export default function APIClientProvider(props: {
   userIdPJwt: string | null;
 }) {
   const { user, userIdPJwt } = props;
-  const apiClient = new APIClient({
+  const apiClient = new CustomApiClient({
     apiUrl: APIGEE_PROXY_URL,
     accessToken: userIdPJwt,
     organizationName: APIGEE_ORG_NAME,

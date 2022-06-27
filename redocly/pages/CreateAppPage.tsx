@@ -21,10 +21,9 @@ function CreateAppPageInternal() {
 
   const queryClient = useQueryClient();
 
-  const creatingAppResult = useMutation(() => apiClient!.createDeveloperApp(name, enabledApis), {
+  const creatingAppResult = useMutation(() => apiClient!.createCustomDeveloperApp(name, enabledApis, description), {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY_APPS);
-      apiClient!.createDeveloperAppKey(name, enabledApis, [{ name: 'description', value: description }]);
     },
   });
 
@@ -45,7 +44,7 @@ function CreateAppPageInternal() {
   };
 
   // Owner
-  const appOwner = `Me(${apiClient.email})`;
+  const appOwner = `Me(${apiClient!.email})`;
 
   // APIs selection
   const [enabledApis, setEnabledApis] = React.useState<string[]>([]);
