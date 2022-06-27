@@ -1,16 +1,15 @@
 import * as React from 'react';
 
-import { Divider, Container, Button, Box, Alert } from '@mui/material';
+import { Divider, Container, Button, Box, Alert, CircularProgress } from '@mui/material';
 import { Cancel, Save, Restore } from '@mui/icons-material';
-import CircularProgress from '../components/common-elements/CircularProgress';
 import { navigate } from '@reach/router';
-import { APIClientContext } from '../services/APIClientProvider';
+import { APIClientContext } from '../../services/APIClientProvider';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../services/config';
-import ProtectedRoute from './ProtectedRoute';
-import AppOverview from '../components/app-form/Overview';
-import AppOwner from '../components/app-form/Owner';
-import AppApisSelection from '../components/app-form/ApisSelection';
+import { QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../../services/config';
+import ProtectedRoute from '../ProtectedRoute';
+import AppOverview from '../../components/AppOverview';
+import AppOwner from '../../components/AppOwner';
+import AppApisSelection from '../../components/AppApisSelection';
 
 export function CreateAppPage() {
   return <ProtectedRoute component={<CreateAppPageInternal />} />;
@@ -97,7 +96,7 @@ function CreateAppPageInternal() {
             enabledApis={enabledApis}
             handleApisChange={handleApisChange}
             error={error}
-            data={data}
+            apiProducts={data?.apiProduct || []}
           />
           {error &&
             <Alert severity="error">

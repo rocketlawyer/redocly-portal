@@ -1,18 +1,14 @@
 import * as React from 'react';
 
 import { Alert } from '@redocly/developer-portal/ui';
-import { ApiProduct } from '../services/apigee-api-types';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Lock, Save } from '@mui/icons-material';
-
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 
-export default function ApisList(props: {
-  products?: ApiProduct[];
-  enabledApis: string[];
-  onChange: (enabledApis: string[]) => void;
-}) {
+import { ApiProduct } from '../services/apigee-api-types';
+
+export default function ApisList({ products = [], enabledApis, onChange }: ApisListProps) {
   const columns: GridColDef[] = [
     {
       field: 'displayName',
@@ -73,7 +69,6 @@ export default function ApisList(props: {
     return product.createdAt;
   }
 
-  const { products, enabledApis, onChange } = props;
   const sortedProducts = ([...products]).sort((a, b) => a.displayName.localeCompare(b.displayName));
 
   if (!products?.length) {
@@ -126,4 +121,10 @@ export default function ApisList(props: {
       </div>
     </div>
   );
+}
+
+interface ApisListProps {
+  products?: ApiProduct[];
+  enabledApis: string[];
+  onChange: (enabledApis: string[]) => void;
 }

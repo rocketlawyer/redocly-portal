@@ -1,8 +1,9 @@
 import * as React from 'react';
+
 import { Box, IconButton, Tooltip } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-export default function ApiKeyCell({consumerKey}) {
+export default function ApiKeyCell({consumerKey}: {consumerKey: string}) {
   const copySecret = () => {
     navigator.clipboard.writeText(consumerKey);
   }

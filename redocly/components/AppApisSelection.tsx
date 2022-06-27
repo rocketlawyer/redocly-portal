@@ -1,15 +1,18 @@
+import React from "react";
+
 import { Grid, Typography, CircularProgress } from "@mui/material";
 import { Lock } from '@mui/icons-material';
-import ApisList from "../ApisList";
-import React from "react";
+
+import ApisList from "./AppApisList";
+import { ApiProduct } from "../services/apigee-api-types";
 
 export default function AppApisSelection({
   isLoading,
   enabledApis,
   handleApisChange,
   error,
-  data
-}) {
+  apiProducts
+}: AppApisListProps) {
   return (
     <Grid container sx={{ pt: 2, pb: 2 }}>
       <Grid item xs={12} lg={3}>
@@ -25,9 +28,9 @@ export default function AppApisSelection({
           <CircularProgress />
         ) : (
           !error &&
-          data?.apiProduct && (
+          apiProducts && (
             <ApisList
-              products={data.apiProduct}
+              products={apiProducts}
               enabledApis={enabledApis}
               onChange={handleApisChange}
             />
@@ -36,4 +39,12 @@ export default function AppApisSelection({
       </Grid>
     </Grid>
   );
+}
+
+interface AppApisListProps {
+  isLoading: boolean;
+  enabledApis: string[];
+  error: any;
+  apiProducts: ApiProduct[];
+  handleApisChange: (apis: string[]) => void;
 }

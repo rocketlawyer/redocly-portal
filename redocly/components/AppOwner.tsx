@@ -1,7 +1,8 @@
-import { Grid, MenuItem, Select, Typography } from "@mui/material";
 import React from "react";
 
-export default function AppOwner({appOwner}) {
+import { Grid, MenuItem, Select, Typography } from "@mui/material";
+
+export default function AppOwner({ appOwner }: { appOwner: string }) {
   return (
     <Grid container sx={{ pt: 2, pb: 2 }}>
       <Grid item lg={3} xs={12}>

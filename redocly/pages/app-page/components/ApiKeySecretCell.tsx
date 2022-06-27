@@ -1,8 +1,9 @@
 import * as React from 'react';
+
 import { Box, IconButton, Button, Tooltip } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
-export default function ApiKeySecretCell({ consumerSecret }) {
+export default function ApiKeySecretCell({ consumerSecret }: { consumerSecret: string }) {
   const [isSecretVisible, setIsSecretVisible] = React.useState(false);
 
   const showSecret = () => {

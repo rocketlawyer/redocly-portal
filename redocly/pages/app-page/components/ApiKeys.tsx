@@ -2,9 +2,10 @@ import * as React from 'react';
 
 import { Box, Grid, Typography } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
-import { ApiProduct } from "../../../services/apigee-api-types";
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Credential } from '@redocly/developer-portal/dist/engine/src/apigee/services/apigee-api-types';
+
+import { ApiProduct } from "../../../services/apigee-api-types";
 import ApiKeyCell from './ApiKeyCell';
 import ApiKeySecretCell from './ApiKeySecretCell';
 import ApiKeyStatusCell from './ApiKeyStatusCell';
@@ -21,7 +22,7 @@ export function getReadableDate(date: number) {
   return new window.Date(date).toLocaleString('en-US', localeStringOptions);
 }
 
-export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoadingApiRevoke, addApiKey, isLoadingAddApiKey }) {
+export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoadingApiRevoke, addApiKey, isLoadingAddApiKey }: ApiKeysProps) {
   const columns: GridColDef[] = [
     {
       field: 'consumerKey',
@@ -132,7 +133,7 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
               }}
             />
           </div>
-          <Box sx={{mt: 2}}>
+          <Box sx={{ mt: 2 }}>
             <CreateNewApiKeyDialog
               onConfirmation={handleAddApiKey}
               isLoadingAddApiKey={isLoadingAddApiKey}
@@ -142,4 +143,13 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
       </Grid>
     </Grid>
   );
+}
+
+interface ApiKeysProps {
+  credentials: Credential[];
+  appId: string;
+  handleApiRevoke: (consumerKey: string) => void;
+  isLoadingApiRevoke: boolean;
+  addApiKey: () => void;
+  isLoadingAddApiKey: boolean;
 }

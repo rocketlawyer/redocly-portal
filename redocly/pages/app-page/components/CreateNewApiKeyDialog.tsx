@@ -1,8 +1,9 @@
-import { LoadingButton } from '@mui/lab';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import * as React from 'react';
 
-export default function CreateNewApiKeyDialog({ onConfirmation, isLoadingAddApiKey }) {
+import { LoadingButton } from '@mui/lab';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+
+export default function CreateNewApiKeyDialog({ onConfirmation, isLoadingAddApiKey }: CreateNewApiKeyDialogProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -62,3 +63,8 @@ export default function CreateNewApiKeyDialog({ onConfirmation, isLoadingAddApiK
     </Box>
   );
 }
+
+interface CreateNewApiKeyDialogProps {
+  onConfirmation: () => void;
+  isLoadingAddApiKey: boolean;
+};

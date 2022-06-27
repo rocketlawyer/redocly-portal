@@ -1,19 +1,20 @@
 import * as React from 'react';
 
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { navigate, Router, useParams } from '@reach/router';
 import { Divider, Container, Button, Box, Alert, CircularProgress } from '@mui/material';
 import { Cancel, Save, Restore, Delete } from '@mui/icons-material';
-import { navigate, Router, useParams } from '@reach/router';
 import { usePathPrefix } from '@redocly/developer-portal/ui';
-import { APIClientContext } from '../services/APIClientProvider';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { QUERY_KEY_APP, QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../services/config';
-import ProtectedRoute from './ProtectedRoute';
-import AppOverview from '../components/app-form/Overview';
-import AppOwner from '../components/app-form/Owner';
-import AppApisSelection from '../components/app-form/ApisSelection';
-import { ApiProduct, App, Attribute, Attributes } from '../services/apigee-api-types';
-import ApiKeys from '../components/app-form/api-keys/ApiKeys';
-import { getAppAttribute } from '../services/helpers';
+
+import { APIClientContext } from '../../services/APIClientProvider';
+import { ApiProduct, App, Attribute, Attributes } from '../../services/apigee-api-types';
+import { getAppAttribute } from '../../services/helpers';
+import { QUERY_KEY_APP, QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../../services/config';
+import ProtectedRoute from '../ProtectedRoute';
+import AppOverview from '../../components/AppOverview';
+import AppOwner from '../../components/AppOwner';
+import AppApisSelection from '../../components/AppApisSelection';
+import ApiKeys from './components/ApiKeys';
 
 export function AppPage(_props: { path?: string }) {
   const pathPrefix = usePathPrefix();
@@ -137,7 +138,6 @@ function AppPageInternal(_props: { path?: string }) {
   );
 
   const handleSave = async () => {
-    console.log(enabledApis);
     await saveAppAsync();
     navigate('/apps/');
   };
@@ -193,7 +193,7 @@ function AppPageInternal(_props: { path?: string }) {
               enabledApis={enabledApis}
               handleApisChange={handleApisChange}
               error={apiProductsError}
-              data={apiProductData}
+              apiProducts={apiProductData?.apiProduct || []}
             />
             {error &&
               <Alert severity="error">
