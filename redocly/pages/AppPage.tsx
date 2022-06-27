@@ -1,10 +1,9 @@
 import * as React from 'react';
 
-import { Divider, Container, Button, Box, Alert } from '@mui/material';
+import { Divider, Container, Button, Box, Alert, CircularProgress } from '@mui/material';
 import { Cancel, Save, Restore, Delete } from '@mui/icons-material';
 import { navigate, Router, useParams } from '@reach/router';
 import { usePathPrefix } from '@redocly/developer-portal/ui';
-import CircularProgress from '../components/common-elements/CircularProgress';
 import { APIClientContext } from '../services/APIClientProvider';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { QUERY_KEY_APP, QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../services/config';
@@ -14,6 +13,7 @@ import AppOwner from '../components/app-form/Owner';
 import AppApisSelection from '../components/app-form/ApisSelection';
 import { ApiProduct, App, Attribute, Attributes } from '../services/apigee-api-types';
 import ApiKeys from '../components/app-form/api-keys/ApiKeys';
+import { getAppAttribute } from '../services/helpers';
 
 export function AppPage(_props: { path?: string }) {
   const pathPrefix = usePathPrefix();
@@ -29,10 +29,6 @@ function AppPageInternal(_props: { path?: string }) {
   const { apiClient } = React.useContext(APIClientContext);
 
   const queryClient = useQueryClient();
-
-  const getAppAttribute = (attributes: Attribute[], attrName: string): any => {
-    return attributes?.find(attr => attr?.name === attrName)?.value;
-  }
 
   // Load App
   const setValues = (data: App) => {
@@ -95,7 +91,7 @@ function AppPageInternal(_props: { path?: string }) {
 
   // Enabled APIs
   const [enabledApis, setEnabledApis] = React.useState<string[]>([]);
-  const {data: apiProductData, isLoading: isLoadingApiProducts, error: apiProductsError,} = useQuery<any, Error, { apiProduct: ApiProduct[] }>(
+  const { data: apiProductData, isLoading: isLoadingApiProducts, error: apiProductsError, } = useQuery<any, Error, { apiProduct: ApiProduct[] }>(
     QUERY_KEY_PRODUCTS,
     () => apiClient?.getApiProducts(),
   );
@@ -114,7 +110,7 @@ function AppPageInternal(_props: { path?: string }) {
     return apiProducts ? apiProducts.reduce((currList: string[], currValue: string) => {
       currList.push(currValue);
       return currList;
-    }, []): [];
+    }, []) : [];
   }
 
   const handleApisChange = (apis: string[]) => {
@@ -166,79 +162,85 @@ function AppPageInternal(_props: { path?: string }) {
   return (
     <Box>
       <Container maxWidth="xl">
-        <Box>
-          <AppOverview
-            appName={name}
-            appDescription={description}
-            appId={appId}
-            nameTouched={inputTouched}
-            nameIsValid={nameIsValid}
-            nameIsTooLong={nameIsTooLong}
-            handleChangeName={handleChangeName}
-            handleChangeDescription={handleChangeDescription}
-          ></AppOverview>
-          <Divider />
-          <AppOwner
-            appOwner={appOwner}
-          />
-          <Divider />
-          <ApiKeys
-            credentials={appData?.credentials || []}
-            appId={appId}
-            isLoadingApiRevoke={isLoadingApiRevoke}
-            handleApiRevoke={handleApiRevoke}
-            addApiKey={handleAddApiKey}
-            isLoadingAddApiKey={isLoadingAddApiKey}
-          />
-          <Divider />
-          <AppApisSelection
-            isLoading={isLoadingApiProducts}
-            enabledApis={enabledApis}
-            handleApisChange={handleApisChange}
-            error={apiProductsError}
-            data={apiProductData}
-          />
-          {error &&
-            <Alert severity="error">
-              {(error as Error).message}
-            </Alert>}
-          {error &&
-            <Alert severity="error">
-              {(error as Error).message}
-            </Alert>
-          }
-          <Box sx={{ justifyContent: 'flex-end', display: 'flex', mt: 2 }}>
-            <Button
-              color="primary"
-              onClick={handleCancel}
-            >
-              <Cancel sx={{ mr: 1 }} /> Cancel
-            </Button>
-            <Button
-              color="primary"
-              onClick={handleDelete}
-            >
-              <Delete sx={{ mr: 1 }} /> Delete
-            </Button>
-            <Button
-              color="primary"
-              disabled={!canReset()}
-              onClick={handleReset}
-            >
-              <Restore sx={{ mr: 1 }} /> Reset
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleSave}
-              sx={{ ml: 2 }}
-              disabled={isLoadingResult || !nameIsValid}
-            >
-              {isLoadingResult && <CircularProgress size={18} />}
-              <Save sx={{ mr: 1 }} /> Save
-            </Button>
+        {!isLoading && !isDeleting ? (
+          <Box>
+            <AppOverview
+              appName={name}
+              appDescription={description}
+              appId={appId}
+              nameTouched={inputTouched}
+              nameIsValid={nameIsValid}
+              nameIsTooLong={nameIsTooLong}
+              handleChangeName={handleChangeName}
+              handleChangeDescription={handleChangeDescription}
+            ></AppOverview>
+            <Divider />
+            <AppOwner
+              appOwner={appOwner}
+            />
+            <Divider />
+            <ApiKeys
+              credentials={appData?.credentials || []}
+              appId={appId}
+              isLoadingApiRevoke={isLoadingApiRevoke}
+              handleApiRevoke={handleApiRevoke}
+              addApiKey={handleAddApiKey}
+              isLoadingAddApiKey={isLoadingAddApiKey}
+            />
+            <Divider />
+            <AppApisSelection
+              isLoading={isLoadingApiProducts}
+              enabledApis={enabledApis}
+              handleApisChange={handleApisChange}
+              error={apiProductsError}
+              data={apiProductData}
+            />
+            {error &&
+              <Alert severity="error">
+                {(error as Error).message}
+              </Alert>}
+            {error &&
+              <Alert severity="error">
+                {(error as Error).message}
+              </Alert>
+            }
+            <Box sx={{ justifyContent: 'flex-end', display: 'flex', mt: 2 }}>
+              <Button
+                color="primary"
+                onClick={handleCancel}
+              >
+                <Cancel sx={{ mr: 1 }} /> Cancel
+              </Button>
+              <Button
+                color="primary"
+                onClick={handleDelete}
+              >
+                <Delete sx={{ mr: 1 }} /> Delete
+              </Button>
+              <Button
+                color="primary"
+                disabled={!canReset()}
+                onClick={handleReset}
+              >
+                <Restore sx={{ mr: 1 }} /> Reset
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSave}
+                sx={{ ml: 2 }}
+                disabled={isLoadingResult || !nameIsValid}
+              >
+                {isLoadingResult && <CircularProgress size={18} />}
+                <Save sx={{ mr: 1 }} /> Save
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        ) : (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress size={50} />
+          </Box>
+        )}
       </Container>
     </Box>
   );
