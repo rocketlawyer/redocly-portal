@@ -2,13 +2,13 @@ import * as React from 'react';
 
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { navigate, Router, useParams } from '@reach/router';
-import { Divider, Container, Button, Box, Alert, CircularProgress } from '@mui/material';
+import { Divider, Container, Button, Box, Alert, CircularProgress, AppBar, Toolbar, Typography } from '@mui/material';
 import { Cancel, Save, Restore, Delete } from '@mui/icons-material';
 import { usePathPrefix } from '@redocly/developer-portal/ui';
 
 import { APIClientContext } from '../../services/APIClientProvider';
 import { ApiProduct, App, Attribute, Attributes } from '../../services/apigee-api-types';
-import { getAppAttribute } from '../../services/helpers';
+import { getAppAttribute, getAppDisplayName, withPathPrefix } from '../../services/helpers';
 import { QUERY_KEY_APP, QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../../services/config';
 import ProtectedRoute from '../ProtectedRoute';
 import AppOverview from '../../components/AppOverview';
@@ -19,11 +19,12 @@ import ApiKeys from './components/ApiKeys';
 export function AppPage(_props: { path?: string }) {
   const pathPrefix = usePathPrefix();
   return (
-    <Router basepath={`app/${pathPrefix}`}>
+    <Router basepath={withPathPrefix('app', pathPrefix)}>
       <ProtectedRoute path={'/:appName'} component={<AppPageInternal />} />
     </Router>
   );
 }
+
 
 function AppPageInternal(_props: { path?: string }) {
   const params = useParams();
@@ -38,6 +39,8 @@ function AppPageInternal(_props: { path?: string }) {
     setAppData(data);
     setDescription(getAppAttribute(data?.attributes, Attributes.description) || '');
     setEnabledApis(getApiProductsName(data?.attributes));
+    const appOwner = getAppAttribute(data?.attributes, Attributes.owner);
+    setAppOwner(appOwner === apiClient?.email ? `Me(${apiClient!.email})` : appOwner);
   }
 
   const { isLoading, error } = useQuery<any, Error, App>(QUERY_KEY_APP, () =>
@@ -66,7 +69,7 @@ function AppPageInternal(_props: { path?: string }) {
   };
 
   // Owner
-  const appOwner = `Me(${apiClient!.email})`;
+  const [appOwner, setAppOwner] = React.useState('');
 
   // APIs Keys
 
@@ -120,7 +123,7 @@ function AppPageInternal(_props: { path?: string }) {
 
   // Page
   const { mutateAsync: saveAppAsync, isLoading: isLoadingResult, error: resultError } = useMutation(
-    () => apiClient!.updateCustomDeveloperApp(appData.name, enabledApis, description),
+    () => apiClient!.updateCustomDeveloperApp(appData.name, enabledApis, description, appOwner),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(QUERY_KEY_APPS);
@@ -161,6 +164,13 @@ function AppPageInternal(_props: { path?: string }) {
 
   return (
     <Box>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+            {getAppDisplayName(appData.attributes)}
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <Container maxWidth="xl">
         {!isLoading && !isDeleting ? (
           <Box>
@@ -237,7 +247,7 @@ function AppPageInternal(_props: { path?: string }) {
             </Box>
           </Box>
         ) : (
-          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <CircularProgress size={50} />
           </Box>
         )}

@@ -60,5 +60,6 @@ export interface ApiProduct {
 export enum Attributes {
   description = 'description',
   displayName = 'displayName',
-  apiProducts = 'apiProducts'
+  apiProducts = 'apiProducts',
+  owner = 'owner'
 }

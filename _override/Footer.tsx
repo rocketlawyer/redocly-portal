@@ -1,35 +1,35 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { Flex, Link } from '@redocly/ui';
+import { Flex, Link } from '@redocly/developer-portal/ui';
 
 export default function Footer(props) {
-    const { columns, copyrightText } = props.footer;
+  const { columns } = props.footer;
 
-    return (
-        <FooterWrapper>
-            <Flex py="30px" justifyContent="center">
+  return (
+    <FooterWrapper>
+      <Flex py="30px" justifyContent="center">
+        <FooterItems>
+          {
+            columns.map((col, index) => {
+              return <li key={index}>
+
                 <FooterItems>
-                    {
-                        columns.map((col, index) => {
-                            return <li key={index}>
-
-                                <FooterItems>
-                                    {
-                                        col.items.map((item, index) => {
-                                            return <li key={index}>
-                                                <Link to={item.link} style={{ textDecoration: 'none' }}>{item.label}</Link>
-                                            </li>
-                                        })
-                                    }
-                                </FooterItems>
-                            </li>
-                        })
-                    }
+                  {
+                    col.items.map((item, index) => {
+                      return <li key={index}>
+                        <Link to={item.link} style={{ textDecoration: 'none' }}>{item.label}</Link>
+                      </li>
+                    })
+                  }
                 </FooterItems>
-            </Flex>
-        </FooterWrapper>
-    )
+              </li>
+            })
+          }
+        </FooterItems>
+      </Flex>
+    </FooterWrapper>
+  )
 }
 
 const FooterWrapper = styled.div`

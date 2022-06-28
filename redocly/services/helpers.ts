@@ -13,6 +13,12 @@ export function getReadableDate(date: string | number) {
   return new window.Date(parseInt(date as string, 10)).toLocaleString('en-US', localeStringOptions);
 }
 
+export function withPathPrefix(path, pathPrefix) {
+  return pathPrefix ? (pathPrefix.startsWith('/') || (pathPrefix = `/${pathPrefix}`),
+          pathPrefix.endsWith('/') || (pathPrefix = `${pathPrefix}/`),
+          `${pathPrefix}${path}`) : `/${path}`;
+}
+
 export const getAppAttribute = (attributes: Attribute[], attrName: string): any => {
   return attributes?.find(attr => attr?.name === attrName)?.value;
 }

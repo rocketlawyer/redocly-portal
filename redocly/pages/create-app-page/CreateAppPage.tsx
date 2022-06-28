@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Divider, Container, Button, Box, Alert, CircularProgress } from '@mui/material';
+import { Divider, Container, Button, Box, Alert, CircularProgress, AppBar, Toolbar, Typography } from '@mui/material';
 import { Cancel, Save, Restore } from '@mui/icons-material';
 import { navigate } from '@reach/router';
 import { APIClientContext } from '../../services/APIClientProvider';
@@ -75,6 +75,13 @@ function CreateAppPageInternal() {
 
   return (
     <Box>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+            New App
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <Container>
         <Box>
           <AppOverview

@@ -18,19 +18,21 @@ export class CustomApiClient extends APIClient {
         attributes: [
           { name: Attributes.displayName, value: appName },
           { name: Attributes.description, value: description },
+          { name: Attributes.owner, value: this.email },
           { name: Attributes.apiProducts, value: JSON.stringify(apiProducts) },
         ]
       }),
       method: "POST"
     });
   }
-  updateCustomDeveloperApp(appName: string, apiProducts: string[], description: string) {
+  updateCustomDeveloperApp(appName: string, apiProducts: string[], description: string, appOwner: string) {
     return this.fetchData(`${this.developerUrl}/apps/${appName}`, {
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
         attributes: [
           { name: Attributes.displayName, value: appName },
           { name: Attributes.description, value: description },
+          { name: Attributes.owner, value: appOwner },
           { name: Attributes.apiProducts, value: JSON.stringify(apiProducts) },
         ]
       }),
