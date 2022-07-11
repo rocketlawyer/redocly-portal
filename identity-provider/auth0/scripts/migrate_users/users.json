@@ -1,0 +1,232 @@
+{
+    "users": [
+        {
+            "email":"tim@saritasa.com",
+            "user_metadata":
+            {
+                "first_name":"Tim",
+                "last_name":"Ederer",
+                "companyId":"0001",
+                "telephone_number":"949.391.3843",
+                "orgUuid":"fff0a409-e896-46d0-9084-4d06ea5abbbf"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Tim Ederer",
+        "nickname":"Tim Ederer",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"tim@myrentdoor.com",
+            "user_metadata":
+            {
+                "first_name":"Tim",
+                "last_name":"Burke",
+                "companyId":"0001",
+                "telephone_number":"16126699599",
+                "orgUuid":"59306368-cee1-4f69-b72d-6441615f865d"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Tim Burke",
+        "nickname":"Tim Burke",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"sautiwar@adobe.com",
+            "user_metadata":
+            {
+                "first_name":"Saurabh",
+                "last_name":"Tiwari",
+                "companyId":"0001",
+                "telephone_number":"4085365425",
+                "orgUuid":"8802d520-da9f-4c48-995c-395017315cd1"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Saurabh Tiwari",
+        "nickname":"Saurabh",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        }
+        {
+            "email":"rocket-lawyer-dev@lawrina.com",
+            "user_metadata":
+            {
+                "first_name":"Yehor",
+                "last_name":"Melnykov",
+                "companyId":"0001",
+                "telephone_number":"380734195357",
+                "orgUuid":"b3aba760-6813-4955-a079-48d9b9f1700d"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Yehor Melnykov",
+        "nickname":"Yehor",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"malangul@adobe.com",
+            "user_metadata":
+            {
+                "first_name":"Raghu",
+                "last_name":"Rao",
+                "companyId":"0001",
+                "telephone_number":"4085364905",
+                "orgUuid":"8802d520-da9f-4c48-995c-395017315cd1"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Raghu Rao",
+        "nickname":"Rao",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"greg@rockycreekdigital.com",
+            "user_metadata":
+            {
+                "first_name":"Greg",
+                "last_name":"Williamson",
+                "companyId":"0001",
+                "telephone_number":"5753023749",
+                "orgUuid":"99298dba-be2e-406b-a558-2428fe681afb"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Greg Williamson",
+        "nickname":"Greg Williamson",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"glaroche@adobe.com",
+            "user_metadata":
+            {
+                "first_name":"Genevieve",
+                "last_name":"Laroche",
+                "companyId":"0001",
+                "telephone_number":"408-536-2143",
+                "orgUuid":"8802d520-da9f-4c48-995c-395017315cd1"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Genevieve Laroche",
+        "nickname":"Genevieve Laroche",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"doughays@eastfacesoftware.com",
+            "user_metadata":
+            {
+                "first_name":"Doug",
+                "last_name": "Hays",
+                "companyId":"0001",
+                "telephone_number":"3035709810",
+                "orgUuid":"53332215-25c3-4a81-82fb-4a8056887e7d"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Doug Hays",
+        "nickname":"Doug Hays",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"dc-rocketlawyer-integration-stage@adobe.com",
+            "user_metadata":
+            {
+                "first_name":"Adobe",
+                "last_name": "Stage",
+                "companyId":"0001",
+                "telephone_number":"4085365425",
+                "orgUuid":"8802d520-da9f-4c48-995c-395017315cd1"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Adobe Stage",
+        "nickname":"Adobe Stage",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"dc-rocketlawyer-integration-dev@adobe.com",
+            "user_metadata":
+            {
+                "first_name":"Adobe-Dev Integration",
+                "last_name": "Integration",
+                "companyId":"0001",
+                "telephone_number":"4085365425",
+                "orgUuid":"8802d520-da9f-4c48-995c-395017315cd1"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Adobe-Dev Integration",
+        "nickname":"Adobe-Dev Integration",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"amalik@thepointofit.com",
+            "user_metadata":
+            {
+                "first_name":"Adil Malik",
+                "last_name":  "Malik",
+                "companyId":"0001",
+                "telephone_number":"2817214013",
+                "orgUuid":"aee4459d-f532-4dd8-ac6f-c0b975f400ea"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Adil Malik",
+        "nickname":"Adil Malik",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        },
+        {
+            "email":"amalik@thepointofit.com",
+            "user_metadata":
+            {
+                "first_name":"Carlton van",
+                "last_name":  "Putten",
+                "companyId":"0001",
+                "telephone_number":"619-807-1537",
+                "orgUuid":"22667588-c9ae-4f39-a87b-0cce3b980aa9"
+            },
+            "email_verified": true,
+            "app_metadata":{
+                "invitedToMyApp": true
+            },
+        "name":"Carlton van Putten",
+        "nickname":"Carlton van Putten",
+        "picture":"https://secure.gravatar.com/avatar/15626c5e0c749cb912f9d1ad48dba440?s=480&r=pg&d=https%3A%2F%2Fssl.gstatic.com%2Fs2%2Fprofiles%2Fimages%2Fsilhouette80.png","connection":"redocly-dev-portal",
+        "password":"Pass123456789"
+        }
+    ]
+}
