@@ -39,7 +39,7 @@ function AppsPageInternal() {
       flex: 2,
       minWidth: 300,
       renderCell: (params: GridRenderCellParams<App>) => (
-        <TableTextCell text={getAppAttribute(params.row.attributes, Attributes.displayName)} />
+        <TableTextCell text={getAppAttribute(params.row.attributes, Attributes.displayName) || params.row.name} />
       )
     },
     {
@@ -80,7 +80,7 @@ function AppsPageInternal() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            My App
+            My Apps
           </Typography>
           <Button color="secondary" onClick={handleNewApp} variant="contained">+ NEW APP</Button>
         </Toolbar>
@@ -102,6 +102,7 @@ function AppsPageInternal() {
                   autoHeight
                   getRowId={handleGetRowId}
                   onRowClick={handleRowClick}
+                  getRowClassName={() => 'pointer'}
                   onCellClick={(params, event) => {
                     event.defaultMuiPrevented = true;
                   }}

@@ -1,4 +1,4 @@
-import { Attribute } from './apigee-api-types';
+import { ApiProductRef, ApiProductRefStatus, Attribute } from './apigee-api-types';
 
 export function getAppDisplayName(attributes?: Attribute[]) {
   return attributes?.find(attr => attr?.name === 'DisplayName')?.value;
@@ -21,4 +21,12 @@ export function withPathPrefix(path, pathPrefix) {
 
 export const getAppAttribute = (attributes: Attribute[], attrName: string): any => {
   return attributes?.find(attr => attr?.name === attrName)?.value;
+}
+
+export const getEnabledApiProduct = (apiProductRefs: ApiProductRef[]) => {
+  return apiProductRefs.filter(({ status }) =>
+    status !== ApiProductRefStatus.CANCEL_REQUEST &&
+    status !== ApiProductRefStatus.DEFAULT &&
+    status !== ApiProductRefStatus.REVOKED
+  ).map(({apiproduct}) => apiproduct);
 }

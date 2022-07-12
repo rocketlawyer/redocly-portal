@@ -10,6 +10,8 @@ import ProtectedRoute from '../ProtectedRoute';
 import AppOverview from '../../components/AppOverview';
 import AppOwner from '../../components/AppOwner';
 import AppApisSelection from '../../components/AppApisSelection';
+import { ApiProductRef } from '../../services/apigee-api-types';
+import { getEnabledApiProduct } from '../../services/helpers';
 
 export function CreateAppPage() {
   return <ProtectedRoute component={<CreateAppPageInternal />} />;
@@ -20,7 +22,8 @@ function CreateAppPageInternal() {
 
   const queryClient = useQueryClient();
 
-  const creatingAppResult = useMutation(() => apiClient!.createCustomDeveloperApp(name, enabledApis, description), {
+  // const creatingAppResult = useMutation(() => apiClient!.createCustomDeveloperApp(name, enabledApis, description), {
+  const creatingAppResult = useMutation(() => apiClient!.createCustomDeveloperApp(name, getEnabledApiProduct(enabledApis), description), {
     onSuccess: () => {
       queryClient.invalidateQueries(QUERY_KEY_APPS);
     },
@@ -46,9 +49,9 @@ function CreateAppPageInternal() {
   const appOwner = `Me(${apiClient!.email})`;
 
   // APIs selection
-  const [enabledApis, setEnabledApis] = React.useState<string[]>([]);
+  const [enabledApis, setEnabledApis] = React.useState<ApiProductRef[]>([]);
 
-  const handleApisChange = (apis: string[]) => {
+  const handleApisChange = (apis: ApiProductRef[]) => {
     setEnabledApis(apis || []);
   };
 

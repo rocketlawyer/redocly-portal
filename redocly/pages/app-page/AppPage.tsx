@@ -7,8 +7,8 @@ import { Cancel, Save, Restore, Delete } from '@mui/icons-material';
 import { usePathPrefix } from '@redocly/developer-portal/ui';
 
 import { APIClientContext } from '../../services/APIClientProvider';
-import { ApiProduct, App, Attribute, Attributes } from '../../services/apigee-api-types';
-import { getAppAttribute, getAppDisplayName, withPathPrefix } from '../../services/helpers';
+import { ApiProduct, ApiProductRef, App, Attributes, Credential, CredentialStatus } from '../../services/apigee-api-types';
+import { getAppAttribute, getAppDisplayName, getEnabledApiProduct, withPathPrefix } from '../../services/helpers';
 import { QUERY_KEY_APP, QUERY_KEY_APPS, QUERY_KEY_PRODUCTS } from '../../services/config';
 import ProtectedRoute from '../ProtectedRoute';
 import AppOverview from '../../components/AppOverview';
@@ -38,7 +38,7 @@ function AppPageInternal(_props: { path?: string }) {
     setAppId(data.appId || '');
     setAppData(data);
     setDescription(getAppAttribute(data?.attributes, Attributes.description) || '');
-    setEnabledApis(getApiProductsName(data?.attributes));
+    setEnabledApis(getApiProductsFromCredentials(data.credentials));
     const appOwner = getAppAttribute(data?.attributes, Attributes.owner);
     setAppOwner(appOwner === apiClient?.email ? `Me(${apiClient!.email})` : appOwner);
   }
@@ -74,56 +74,67 @@ function AppPageInternal(_props: { path?: string }) {
   // APIs Keys
 
   const { mutateAsync: revokeApi, isLoading: isLoadingApiRevoke } = useMutation(
-    (consumerKey: string) => apiClient!.deleteDeveloperAppKey(appData.name, consumerKey),
+    (credential: Credential) => apiClient!.revokeCredential(appData.name, credential),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(QUERY_KEY_APP);
       },
-      onSettled: () => {
+      onMutate: async (credential: Credential) => {
+        await queryClient.cancelQueries(QUERY_KEY_APP);
+        return {
+          ...credential,
+          status: CredentialStatus.REVOKED
+        }
+      }
+    }
+  );
+
+  const { mutateAsync: addApiKey, isLoading: isLoadingAddApiKey } = useMutation(
+    () => apiClient!.createDeveloperAppKey(appData.name, getEnabledApiProduct(enabledApis), []),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(QUERY_KEY_APP);
+      }
+    }
+  );
+
+  const { mutateAsync: updateApiKey, isLoading: isLoadingUpdateApiKey } = useMutation(
+    (credential: Credential) => apiClient!.updateCredential(appData.name, credential.consumerKey, getEnabledApiProduct(enabledApis), appData.attributes),
+    {
+      onSuccess: () => {
         queryClient.invalidateQueries(QUERY_KEY_APP);
       },
     }
   );
 
-  const handleApiRevoke = (consumerKey: string) => {
-    revokeApi(consumerKey);
+  const handleApiRevoke = (credential: Credential) => {
+    revokeApi(credential);
   }
 
   const handleAddApiKey = () => {
     addApiKey();
   }
 
-  // Enabled APIs
-  const [enabledApis, setEnabledApis] = React.useState<string[]>([]);
+  // Enabled APIs product
+  const [enabledApis, setEnabledApis] = React.useState<ApiProductRef[]>([]);
+
   const { data: apiProductData, isLoading: isLoadingApiProducts, error: apiProductsError, } = useQuery<any, Error, { apiProduct: ApiProduct[] }>(
     QUERY_KEY_PRODUCTS,
-    () => apiClient?.getApiProducts(),
+    () => apiClient?.getApiProducts()
   );
 
-  const { mutateAsync: addApiKey, isLoading: isLoadingAddApiKey } = useMutation(
-    () => apiClient!.createDeveloperAppKey(appData.name, getApiProductsName(appData.attributes), []),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(QUERY_KEY_APP);
-      },
-    },
-  );
-
-  const getApiProductsName = (attributes: Attribute[]): string[] => {
-    const apiProducts = JSON.parse(getAppAttribute(attributes, Attributes.apiProducts));
-    return apiProducts ? apiProducts.reduce((currList: string[], currValue: string) => {
-      currList.push(currValue);
-      return currList;
-    }, []) : [];
+  const getApiProductsFromCredentials = (credentials = appData.credentials) => {
+    const approvedCredential = credentials?.find((credential: Credential) => credential.status === CredentialStatus.APPROVED);
+    return approvedCredential?.apiProducts || [];
   }
 
-  const handleApisChange = (apis: string[]) => {
+  const handleApisChange = (apis: ApiProductRef[]) => {
     setEnabledApis(apis || []);
   };
 
   // Page
   const { mutateAsync: saveAppAsync, isLoading: isLoadingResult, error: resultError } = useMutation(
-    () => apiClient!.updateCustomDeveloperApp(appData.name, enabledApis, description, appOwner),
+    () => apiClient!.updateCustomDeveloperApp(appData.name, description, appOwner, getEnabledApiProduct(enabledApis)),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(QUERY_KEY_APPS);
@@ -141,6 +152,9 @@ function AppPageInternal(_props: { path?: string }) {
   );
 
   const handleSave = async () => {
+    appData.credentials.forEach(async (credential) => {
+      await updateApiKey(credential);
+    });
     await saveAppAsync();
     navigate('/apps/');
   };
@@ -167,7 +181,7 @@ function AppPageInternal(_props: { path?: string }) {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            {getAppDisplayName(appData.attributes)}
+            {getAppDisplayName(appData.attributes) || appData.name}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -241,7 +255,7 @@ function AppPageInternal(_props: { path?: string }) {
                 sx={{ ml: 2 }}
                 disabled={isLoadingResult || !nameIsValid}
               >
-                {isLoadingResult && <CircularProgress size={18} />}
+                {(isLoadingResult || isLoadingUpdateApiKey) && <CircularProgress size={18} />}
                 <Save sx={{ mr: 1 }} /> Save
               </Button>
             </Box>

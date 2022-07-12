@@ -3,8 +3,8 @@ import React from "react";
 import { Grid, Typography, CircularProgress } from "@mui/material";
 import { Lock } from '@mui/icons-material';
 
-import ApisList from "./AppApisList";
-import { ApiProduct } from "../services/apigee-api-types";
+import ApiProductList from "./AppApiProductList";
+import { ApiProduct, ApiProductRef } from "../services/apigee-api-types";
 
 export default function AppApisSelection({
   isLoading,
@@ -21,7 +21,7 @@ export default function AppApisSelection({
         </Typography>
       </Grid>
       <Grid item xs={12} lg={9}>
-        <Typography variant="h6" gutterBottom component="div">
+        <Typography variant="h6" gutterBottom component="div" sx={{display: 'flex', alignItems: 'center'}}>
           <Lock fontSize="small" />Indicates approval is required before access to the API is granted.
         </Typography>
         {isLoading ? (
@@ -29,7 +29,7 @@ export default function AppApisSelection({
         ) : (
           !error &&
           apiProducts && (
-            <ApisList
+            <ApiProductList
               products={apiProducts}
               enabledApis={enabledApis}
               onChange={handleApisChange}
@@ -43,8 +43,8 @@ export default function AppApisSelection({
 
 interface AppApisListProps {
   isLoading: boolean;
-  enabledApis: string[];
+  enabledApis: ApiProductRef[];
   error: any;
   apiProducts: ApiProduct[];
-  handleApisChange: (apis: string[]) => void;
+  handleApisChange: (apis: ApiProductRef[]) => void;
 }

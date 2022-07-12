@@ -1,11 +1,10 @@
 import * as React from 'react';
 
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography, Button } from "@mui/material";
 import LoadingButton from '@mui/lab/LoadingButton';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
-import { Credential } from '@redocly/developer-portal/dist/engine/src/apigee/services/apigee-api-types';
 
-import { ApiProduct } from "../../../services/apigee-api-types";
+import { ApiProduct, Credential, CredentialStatus } from "../../../services/apigee-api-types";
 import ApiKeyCell from './ApiKeyCell';
 import ApiKeySecretCell from './ApiKeySecretCell';
 import ApiKeyStatusCell from './ApiKeyStatusCell';
@@ -23,6 +22,14 @@ export function getReadableDate(date: number) {
 }
 
 export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoadingApiRevoke, addApiKey, isLoadingAddApiKey }: ApiKeysProps) {
+  const getFilteredCredentials = () => {
+    return credentials.filter((credential: Credential) => credential.status === CredentialStatus.APPROVED);
+  }
+
+  const [isRevokedVisible, setIsRevokedVisible] = React.useState(false);
+  const [filteredCredentials, setFilteredCredentials] = React.useState(getFilteredCredentials());
+  const revokedCredentials = credentials.filter((credential: Credential) => credential.status === CredentialStatus.REVOKED).length;
+
   const columns: GridColDef[] = [
     {
       field: 'consumerKey',
@@ -84,21 +91,23 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
       sortable: false,
       width: 100,
       renderCell: (params: GridRenderCellParams<ApiProduct>) => (
-        <LoadingButton
-          size="small"
-          onClick={() => revokeApi(params.row.consumerKey)}
-          loading={isLoadingApiRevoke}
-          loadingIndicator="Revoking"
-          variant="outlined"
-        >
-          Revoke
-        </LoadingButton>
+        (params.row.status === CredentialStatus.APPROVED ?
+          <LoadingButton
+            size="small"
+            onClick={() => revokeApi(params.row)}
+            loading={isLoadingApiRevoke}
+            loadingIndicator="Revoking"
+            variant="outlined"
+          >
+            Revoke
+          </LoadingButton> :
+          '')
       )
     }
   ];
 
-  const revokeApi = (consumerKey: string) => {
-    handleApiRevoke(consumerKey);
+  const revokeApi = (credential: Credential) => {
+    handleApiRevoke(credential);
   };
 
   const handleGetRowId = (credential: Credential) => {
@@ -108,6 +117,15 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
   const handleAddApiKey = () => {
     addApiKey();
   };
+
+  const toggleRevokedKeys = () => {
+    if (!isRevokedVisible) {
+      setFilteredCredentials(credentials);
+    } else {
+      setFilteredCredentials(getFilteredCredentials());
+    }
+    setIsRevokedVisible(!isRevokedVisible);
+  }
 
   return (
     <Grid container sx={{ pt: 5, pb: 2, maxWidth: '100%', overflow: 'auto' }}>
@@ -120,7 +138,7 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
         <div style={{ display: 'flex', height: '100%', flexDirection: 'column' }}>
           <div style={{ flexGrow: 1 }}>
             <DataGrid
-              rows={credentials}
+              rows={filteredCredentials}
               columns={columns}
               disableColumnMenu={true}
               pageSize={5}
@@ -133,6 +151,16 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
               }}
             />
           </div>
+          {(revokedCredentials > 0 ?
+            <Box sx={{ mt: 2 }}>
+              <Button
+                onClick={toggleRevokedKeys}
+                variant="text"
+                autoFocus
+              >
+                {isRevokedVisible ? `Hide ${revokedCredentials} revoked credentials` : `Show ${revokedCredentials} revoked credentials`}
+              </Button>
+            </Box> : '')}
           <Box sx={{ mt: 2 }}>
             <CreateNewApiKeyDialog
               onConfirmation={handleAddApiKey}
@@ -148,7 +176,7 @@ export default function ApiKeys({ credentials, appId, handleApiRevoke, isLoading
 interface ApiKeysProps {
   credentials: Credential[];
   appId: string;
-  handleApiRevoke: (consumerKey: string) => void;
+  handleApiRevoke: (credential: Credential) => void;
   isLoadingApiRevoke: boolean;
   addApiKey: () => void;
   isLoadingAddApiKey: boolean;

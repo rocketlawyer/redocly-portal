@@ -10,7 +10,17 @@ export interface Attribute {
 
 export interface ApiProductRef {
   apiproduct: string;
-  status: string;
+  status: ApiProductRefStatus;
+}
+
+export enum ApiProductRefStatus {
+  APPROVED = 'approved',
+  PENDING_APPROVAL = 'pending',
+  SAVE_TO_ENABLE = 'save-to-enable',
+  REQUESTED_ACCESS = 'requested-access',
+  DEFAULT = 'defa0ult',
+  REVOKED = 'revoked',
+  CANCEL_REQUEST = 'cancel-request'
 }
 
 export interface Credential {
@@ -21,7 +31,12 @@ export interface Credential {
   expiresAt: string;
   issuedAt: string;
   scopes: string[];
-  status: string;
+  status: 'approved' | 'revoked';
+}
+
+export enum CredentialStatus {
+  APPROVED = 'approved',
+  REVOKED = 'revoked'
 }
 
 export interface App {

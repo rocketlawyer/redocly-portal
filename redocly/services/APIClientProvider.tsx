@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { APIClient, APIGEE_VERSION, APIGEE_PROXY_URL, APIGEE_ORG_NAME } from '@redocly/developer-portal/apigee';
 import { QueryClient, QueryClientProvider, setLogger } from 'react-query';
-import { Attributes } from './apigee-api-types';
+import { Attribute, Attributes, Credential, CredentialStatus } from './apigee-api-types';
 
 export const APIClientContext = React.createContext<{ apiClient: CustomApiClient | null }>({
   apiClient: null,
@@ -11,7 +11,7 @@ export const APIClientContext = React.createContext<{ apiClient: CustomApiClient
 export class CustomApiClient extends APIClient {
   createCustomDeveloperApp(appName: string, apiProducts: string[], description: string) {
     return this.fetchData(`${this.developerUrl}/apps`, {
-      headers: { "Content-type": "application/json" },
+      headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
         name: appName,
         apiProducts,
@@ -22,21 +22,46 @@ export class CustomApiClient extends APIClient {
           { name: Attributes.apiProducts, value: JSON.stringify(apiProducts) },
         ]
       }),
-      method: "POST"
+      method: 'POST'
     });
   }
-  updateCustomDeveloperApp(appName: string, apiProducts: string[], description: string, appOwner: string) {
-    return this.fetchData(`${this.developerUrl}/apps/${appName}`, {
-      headers: { "Content-type": "application/json" },
+  updateCustomDeveloperApp(name: string, description: string, appOwner: string, apiProducts: string[]) {
+    return this.fetchData(`${this.developerUrl}/apps/${name}`, {
+      headers: { 'Content-type': 'application/json' },
       body: JSON.stringify({
+        apiProducts,
+        name,
         attributes: [
-          { name: Attributes.displayName, value: appName },
+          { name: Attributes.displayName, value: name },
           { name: Attributes.description, value: description },
           { name: Attributes.owner, value: appOwner },
           { name: Attributes.apiProducts, value: JSON.stringify(apiProducts) },
         ]
       }),
-      method: "PUT"
+      method: 'PUT'
+    });
+  }
+  updateCredential(appName: string, consumerKey: string, apiProducts: string[], attributes: Attribute[]) {
+    return this.fetchData(`${this.developerUrl}/apps/${appName}/keys/${consumerKey}`, {
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify({
+        apiProducts,
+        attributes
+      }),
+      method: 'POST' // as described in the documentation: https://apidocs.apigee.com/docs/developer-app-keys/1/routes/organizations/%7Borg_name%7D/developers/%7Bdeveloper_email%7D/apps/%7Bapp_name%7D/keys/%7Bconsumer_key%7D/post
+    });
+  }
+  revokeCredential(appName: string, credential: Credential) {
+    return this.fetchData(`${this.developerUrl}/apps/${appName}/keys/${credential.consumerKey}?action=revoke`, {
+      headers: { 'Content-type': 'application/octet-stream' },
+      method: 'POST' // as described in the documentation: https://apidocs.apigee.com/docs/developer-app-keys/1/routes/organizations/%7Borg_name%7D/developers/%7Bdeveloper_email%7D/apps/%7Bapp_name%7D/keys/%7Bconsumer_key%7D/post
+    });
+  }
+  addApiProduct(appName: string, credential: Credential, apiProduct: string) {
+    return this.fetchData(`${this.developerUrl}/apps/${appName}/keys/${credential.consumerKey}/apiproducts/${apiProduct}`, {
+      headers: { 'Content-type': 'application/octet-stream' },
+      body: JSON.stringify(credential),
+      method: 'POST'
     });
   }
 }
