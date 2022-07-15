@@ -80,9 +80,11 @@ function CreateAppPageInternal() {
     <Box>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            New App
-          </Typography>
+          <Container>
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+              New App
+            </Typography>
+          </Container>
         </Toolbar>
       </AppBar>
       <Container>

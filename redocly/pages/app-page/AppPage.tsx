@@ -15,16 +15,16 @@ import AppOverview from '../../components/AppOverview';
 import AppOwner from '../../components/AppOwner';
 import AppApisSelection from '../../components/AppApisSelection';
 import ApiKeys from './components/ApiKeys';
+import ConfirmAppDeletionDialog from './components/DeleteAppDialog';
 
 export function AppPage(_props: { path?: string }) {
   const pathPrefix = usePathPrefix();
   return (
-    <Router basepath={withPathPrefix('app', pathPrefix)}>
+    <Router basepath={withPathPrefix('apps', pathPrefix)}>
       <ProtectedRoute path={'/:appName'} component={<AppPageInternal />} />
     </Router>
   );
 }
-
 
 function AppPageInternal(_props: { path?: string }) {
   const params = useParams();
@@ -39,11 +39,13 @@ function AppPageInternal(_props: { path?: string }) {
     setAppData(data);
     setDescription(getAppAttribute(data?.attributes, Attributes.description) || '');
     setEnabledApis(getApiProductsFromCredentials(data.credentials));
+    setCredentials(data?.credentials || []);
+
     const appOwner = getAppAttribute(data?.attributes, Attributes.owner);
     setAppOwner(appOwner === apiClient?.email ? `Me(${apiClient!.email})` : appOwner);
   }
 
-  const { isLoading, error } = useQuery<any, Error, App>(QUERY_KEY_APP, () =>
+  const { isLoading, error, refetch: refechAppData } = useQuery<any, Error, App>(QUERY_KEY_APP, () =>
     apiClient?.getDeveloperApp(params.appName),
     {
       onSuccess: setValues
@@ -55,6 +57,7 @@ function AppPageInternal(_props: { path?: string }) {
   const [appData, setAppData] = React.useState({} as App);
   const [description, setDescription] = React.useState('');
   const [appId, setAppId] = React.useState('');
+  const [credentials, setCredentials] = React.useState([]as Credential[]);
   const [inputTouched, setInputTouched] = React.useState(false);
   const nameIsValid = /^[a-z][a-z0-9._\-$%#\s]*$/gi.test(name);
   const nameIsTooLong = name.length >= 100;
@@ -78,21 +81,14 @@ function AppPageInternal(_props: { path?: string }) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(QUERY_KEY_APP);
-      },
-      onMutate: async (credential: Credential) => {
-        await queryClient.cancelQueries(QUERY_KEY_APP);
-        return {
-          ...credential,
-          status: CredentialStatus.REVOKED
-        }
       }
     }
   );
 
   const { mutateAsync: addApiKey, isLoading: isLoadingAddApiKey } = useMutation(
-    () => apiClient!.createDeveloperAppKey(appData.name, getEnabledApiProduct(enabledApis), []),
+    () => apiClient!.createDeveloperAppKey(appData.name, getEnabledApiProduct(enabledApis), appData.attributes),
     {
-      onSuccess: (data) => {
+      onSuccess: () => {
         queryClient.invalidateQueries(QUERY_KEY_APP);
       }
     }
@@ -156,16 +152,17 @@ function AppPageInternal(_props: { path?: string }) {
       await updateApiKey(credential);
     });
     await saveAppAsync();
-    navigate('/apps/');
+    navigate('../apps');
   };
 
   const handleCancel = () => {
-    navigate('/apps/');
+    navigate('../apps');
   };
 
   const handleDelete = async () => {
+
     await deleteAppAsync();
-    navigate('/apps/');
+    navigate('../apps');
   }
 
   const handleReset = () => {
@@ -180,9 +177,11 @@ function AppPageInternal(_props: { path?: string }) {
     <Box>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            {getAppDisplayName(appData.attributes) || appData.name}
-          </Typography>
+          <Container maxWidth="xl">
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+              {getAppDisplayName(appData.attributes) || appData.name}
+            </Typography>
+          </Container>
         </Toolbar>
       </AppBar>
       <Container maxWidth="xl">
@@ -204,7 +203,7 @@ function AppPageInternal(_props: { path?: string }) {
             />
             <Divider />
             <ApiKeys
-              credentials={appData?.credentials || []}
+              credentials={credentials || []}
               appId={appId}
               isLoadingApiRevoke={isLoadingApiRevoke}
               handleApiRevoke={handleApiRevoke}
@@ -235,12 +234,9 @@ function AppPageInternal(_props: { path?: string }) {
               >
                 <Cancel sx={{ mr: 1 }} /> Cancel
               </Button>
-              <Button
-                color="primary"
-                onClick={handleDelete}
-              >
-                <Delete sx={{ mr: 1 }} /> Delete
-              </Button>
+              <ConfirmAppDeletionDialog
+                onConfirmation={handleDelete}
+                isLoadingAppDeletion={isDeleting}/>
               <Button
                 color="primary"
                 disabled={!canReset()}

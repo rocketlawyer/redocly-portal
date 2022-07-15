@@ -25,7 +25,7 @@ function AppsPageInternal() {
   };
 
   const handleRowClick = ({ row }) => {
-    navigate(`/app/${row.name}`);
+    navigate(`/apps/${row.name}`);
   }
 
   const handleNewApp = () => {
@@ -79,10 +79,12 @@ function AppsPageInternal() {
     <Box>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
-            My Apps
-          </Typography>
-          <Button color="secondary" onClick={handleNewApp} variant="contained">+ NEW APP</Button>
+          <Container sx={{display: 'flex'}}>
+            <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+              My Apps
+            </Typography>
+            <Button color="secondary" onClick={handleNewApp} variant="contained">+ NEW APP</Button>
+          </Container>
         </Toolbar>
       </AppBar>
       <Container>

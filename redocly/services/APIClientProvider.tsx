@@ -52,10 +52,12 @@ export class CustomApiClient extends APIClient {
     });
   }
   revokeCredential(appName: string, credential: Credential) {
-    return this.fetchData(`${this.developerUrl}/apps/${appName}/keys/${credential.consumerKey}?action=revoke`, {
+    const requestData = {
       headers: { 'Content-type': 'application/octet-stream' },
       method: 'POST' // as described in the documentation: https://apidocs.apigee.com/docs/developer-app-keys/1/routes/organizations/%7Borg_name%7D/developers/%7Bdeveloper_email%7D/apps/%7Bapp_name%7D/keys/%7Bconsumer_key%7D/post
-    });
+    };
+    const finalRequest = this.setAuthHeader(requestData);
+    return fetch(`${this.developerUrl}/apps/${appName}/keys/${credential.consumerKey}?action=revoke`, finalRequest);
   }
   addApiProduct(appName: string, credential: Credential, apiProduct: string) {
     return this.fetchData(`${this.developerUrl}/apps/${appName}/keys/${credential.consumerKey}/apiproducts/${apiProduct}`, {
